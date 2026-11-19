@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anti-XAI 设置与记录</title>
+<style>
+  :root {
+    --bg: #f5f7f9; --card: #ffffff; --text: #0f1419; --muted: #536471; --line: #e6ecf0;
+    --accent: #1d9bf0; --accent-soft: #e8f5fe; --ok: #047857; --warn: #d97706; --danger: #e0245e;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1419; --card: #16202a; --text: #e7e9ea; --muted: #8b98a5; --line: #2a3640; --accent-soft: #10283a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand img { width: 36px; height: 36px; }
+  h1 { font-size: 18px; margin: 0; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+  .pill.warn { background: #fef3c7; color: #b45309; }
+  .pill.ok { background: #e6f6ee; color: #047857; }
+  .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+  .tab { padding: 8px 16px; border: none; background: none; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 15px; margin: 0 0 8px; }
+  .desc { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .field { margin-bottom: 12px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  input[type=text], input[type=password], input[type=number], select, textarea {
+    width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text);
+  }
+  textarea { min-height: 76px; resize: vertical; }
+  .check { display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer; margin: 8px 0; }
+  .inline { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button { font: inherit; font-weight: 600; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  button.primary { background: var(--text); color: var(--card); border-color: var(--text); }
+  button.danger { color: var(--danger); border-color: rgba(224,36,94,0.4); }
+  button:disabled { opacity: .5; cursor: default; }
+  .msg { margin-top: 8px; font-size: 13px; }
+  .msg.ok { color: var(--ok); }
+  .msg.err { color: var(--danger); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: 12px; }
+  .chip button { padding: 0 4px; border: none; background: none; color: var(--muted); font-size: 14px; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .toolbar input { flex: 1; min-width: 180px; }
+  .stats { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .score { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; color: #fff; }
+  .score.high { background: var(--danger); }
+  .score.mid { background: var(--warn); }
+  .score.low { background: #0f766e; }
+  .muted { color: var(--muted); font-size: 12px; }
+  .pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; margin-top: 12px; font-size: 13px; }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px; overflow: auto; font-size: 12px; }
+  a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="icons/icon.svg" alt="">
+      <div>
+        <h1>Anti-XAI：X AI Slop 回复探测器</h1>
+        <div class="muted">
+          纯只读 AI 率探测标注 · 无本地规则 · 无云端共享库 ·
+          基于 <a href="https://chromewebstore.google.com/detail/x-%E9%BB%84%E6%8E%A8%E5%B1%8F%E8%94%BD%E5%99%A8/paaidifphnonojfblgioamenkigglhed" target="_blank" rel="noopener noreferrer"><b>X 黄推屏蔽器</b></a> 改造
+        </div>
+      </div>
+    </div>
+    <span class="pill" id="headerStatus">加载中…</span>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="settings">基础设置</button>
+    <button class="tab" data-tab="records">探测记录</button>
+  </nav>
+
+  <section class="panel active" id="panel-settings">
+    <div class="card">
+      <h2>决策 API 供应商与密钥（必填）</h2>
+      <p class="desc">本扩展仅通过决策 API 进行 AI Slop 探测，不依赖本地关键词/规则。默认供应商为 Jev，也可切换为 Gemini（<code>gemini-decision-1</code>）。</p>
+      <div class="grid">
+        <div class="field">
+          <label for="provider">供应商</label>
+          <select id="provider">
+            <option value="jev">Jev（默认）</option>
+            <option value="gemini">Gemini Decisions (gemini-decision-1)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="jevMode">请求模式</label>
+          <select id="jevMode">
+            <option value="thread">整楼批量判定（推荐）</option>
+            <option value="single">逐条判定</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" id="jevServiceWrap">
+        <label for="jevService">Jev 接口服务</label>
+        <select id="jevService">
+          <option value="official">官方 (https://api.typesafe.ai/v1/systemone)</option>
+          <option value="custom">自定义地址</option>
+        </select>
+      </div>
+      <div class="field" id="customUrlWrap" style="display:none">
+        <label for="jevCustomUrl">自定义接口 URL</label>
+        <input type="text" id="jevCustomUrl" placeholder="https://your-jev-endpoint/v1/systemone">
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label for="jevApiKey" id="apiKeyLabel">API Key（必填）</label>
+          <input type="password" id="jevApiKey" placeholder="粘贴 API Key" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="jevModel">模型版本（可选，留空使用默认）</label>
+          <input type="text" id="jevModel" placeholder="jev-1.13.0">
+        </div>
+      </div>
+      <div class="inline">
+        <button class="primary" id="saveJevBtn">保存配置</button>
+        <button id="pingBtn">测试连接</button>
+      </div>
+      <div class="msg" id="jevMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2>探测设置</h2>
+      <p class="desc">扩展仅从回复页 DOM 抽取 6 个公开字段（原帖正文、作者显示名/@handle/蓝V标记、回复正文、是否含媒体），<b>绝不主动请求任何 X 接口，不执行任何隐藏或屏蔽操作</b>。</p>
+      <label class="check"><input type="checkbox" id="detectEnabled"> 浏览 X 时自动探测回复并标注 AI 率</label>
+
+      <div class="grid" style="margin-top:12px">
+        <div class="field">
+          <label for="aiThreshold">高 AI 率高亮阈值：<span id="thresholdVal">60%</span></label>
+          <input type="range" id="aiThreshold" min="5" max="95" step="1" value="60" style="width:100%">
+        </div>
+        <div class="field">
+          <label for="browseScope">探测范围</label>
+          <select id="browseScope">
+            <option value="replies">仅帖子详情页的回复（推荐）</option>
+            <option value="all">所有页面推文（含时间线）</option>
+          </select>
+        </div>
+      </div>
+      <button class="primary" id="saveGeneralBtn">保存探测设置</button>
+      <div class="msg" id="generalMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2>提示词与阈值 JSON（与标注系统对齐）</h2>
+      <p class="desc">与标注系统的 <code>prompt_config.json</code> 格式完全一致，可在回归页调优后直接复制 JSON 粘贴到此处导入，或导出给标注系统使用。</p>
+      <div class="field">
+        <textarea id="promptJson" style="min-height:170px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      </div>
+      <div class="inline">
+        <button class="primary" id="importPromptBtn">导入并应用 JSON</button>
+        <button id="copyPromptBtn">复制当前 JSON</button>
+      </div>
+      <div class="msg" id="promptJsonMsg"></div>
+    </div>
+
+    <div class="card">
+      <h2>白名单（标为误判的账号）</h2>
+      <p class="desc">白名单内的账号不会被探测或一键屏蔽。</p>
+      <div class="chips" id="allowList"><span class="muted">暂无白名单账号</span></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-records">
+    <div class="card">
+      <div class="stats" id="recStats">加载统计中…</div>
+      <div class="toolbar">
+        <select id="recFilter" style="width:auto">
+          <option value="all">全部记录</option>
+          <option value="flagged">高 AI 率</option>
+          <option value="normal">正常</option>
+        </select>
+        <input type="text" id="recSearch" placeholder="搜索 @handle、昵称、回复内容、原帖链接…">
+        <button id="exportBtn">导出 JSON</button>
+        <button class="danger" id="clearBtn">清空记录</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:140px">账号</th>
+            <th style="width:110px">AI 率</th>
+            <th>回复内容 / 说明</th>
+            <th style="width:100px">状态</th>
+            <th style="width:90px">操作</th>
+          </tr>
+        </thead>
+        <tbody id="recBody"></tbody>
+      </table>
+      <div class="pager">
+        <button id="prevPage">上一页</button>
+        <span id="pageInfo">1 / 1</span>
+        <button id="nextPage">下一页</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="store.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>欢迎使用 Anti-XAI：X AI Slop 回复探测器</title>
+<style>
+  :root {
+    --bg: #f5f7f9; --card: #ffffff; --text: #0f1419; --muted: #536471; --line: #e6ecf0;
+    --accent: #1d9bf0; --accent-soft: #e8f5fe; --ok: #047857; --danger: #e0245e; --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1419; --card: #16202a; --text: #e7e9ea; --muted: #8b98a5; --line: #2a3640; --accent-soft: #10283a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; align-items: center; gap: 12px; }
+  header img { width: 56px; height: 56px; }
+  h1 { font-size: 21px; margin: 0; }
+  .lead { color: var(--muted); margin: 6px 0 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-top: 16px; }
+  .step { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .num { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 12px; }
+  .desc { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .field { margin-bottom: 10px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  input[type=password], input[type=text], select { width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
+  .inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  button { font: inherit; font-weight: 600; border-radius: 999px; padding: 8px 16px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  button.primary { background: var(--text); color: var(--card); border-color: var(--text); }
+  button:disabled { opacity: .5; cursor: default; }
+  .result { margin-top: 8px; font-size: 13px; }
+  .result.ok { color: var(--ok); }
+  .result.err { color: var(--danger); }
+  ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+  .footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="icons/icon.svg" alt="">
+    <div>
+      <h1>欢迎使用 Anti-XAI</h1>
+      <p class="lead">基于决策 API 探测 X（推特）评论区的 AI Slop 回复。默认仅探测并在每条回复上标注 AI 率，不自动隐藏或屏蔽。</p>
+    </div>
+  </header>
+
+  <section class="card" style="border-color: var(--accent); background: var(--accent-soft);">
+    <div style="font-weight: 700; margin-bottom: 4px;">项目来源与致谢</div>
+    <div style="font-size: 13px;">
+      本扩展基于 Chrome 扩展
+      <a href="https://chromewebstore.google.com/detail/x-%E9%BB%84%E6%8E%A8%E5%B1%8F%E8%94%BD%E5%99%A8/paaidifphnonojfblgioamenkigglhed" target="_blank" rel="noopener noreferrer"><b>X 黄推屏蔽器</b></a>
+      二次改造而来，在此基础上改为 AI Slop 回复探测、移除本地规则与云端共享屏蔽库、支持 Jev / Gemini 多供应商与一键屏蔽。
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="step"><span class="num">1</span>配置决策 API 供应商与密钥（必填）</div>
+    <p class="desc">本扩展完全依赖决策 API 探测 AI Slop，不使用本地规则，也不连接任何云端共享屏蔽库。默认供应商为 Jev，也可切换为 Gemini（<code>gemini-decision-1</code>）。</p>
+
+    <div class="field">
+      <label for="provider">决策 API 供应商</label>
+      <select id="provider">
+        <option value="jev">Jev（默认）</option>
+        <option value="gemini">Gemini Decisions (gemini-decision-1)</option>
+      </select>
+    </div>
+
+    <div class="field" id="jevServiceWrap">
+      <label for="jevService">Jev 接口地址</label>
+      <select id="jevService">
+        <option value="official">官方接口 (https://api.typesafe.ai/v1/systemone)</option>
+        <option value="custom">自定义接口地址</option>
+      </select>
+    </div>
+
+    <div class="field" id="customUrlWrap" style="display:none">
+      <label for="jevCustomUrl">自定义接口 URL</label>
+      <input type="text" id="jevCustomUrl" placeholder="https://your-jev-endpoint/v1/systemone">
+    </div>
+
+    <div class="field">
+      <label for="jevApiKey" id="apiKeyLabel">API Key（必填）</label>
+      <input type="password" id="jevApiKey" placeholder="粘贴 API Key" autocomplete="off">
+    </div>
+
+    <div class="inline">
+      <button class="primary" id="saveKeyBtn">保存并测试连接</button>
+    </div>
+    <div class="result" id="keyResult"></div>
+  </section>
+
+  <section class="card">
+    <div class="step"><span class="num">2</span>工作方式说明</div>
+    <ul>
+      <li>打开任意 X 帖子详情页，扩展仅从页面 DOM 读取回复信息并在每条回复右上角标注 <b>🤖 AI xx%</b>。</li>
+      <li><b>纯只读模式</b>：不主动请求任何 X 接口，不自动隐藏，不执行任何屏蔽操作。</li>
+      <li>可在设置页直接导入/导出与标注系统对齐的 <code>prompt_config.json</code>。</li>
+    </ul>
+  </section>
+
+  <div class="footer">
+    <button id="optionsBtn">更多设置</button>
+    <button class="primary" id="doneBtn">前往 X.com</button>
+  </div>
+</div>
+<script src="welcome.js"></script>
+</body>
+</html>

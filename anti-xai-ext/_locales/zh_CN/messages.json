@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Anti-XAI：X AI Slop 回复探测器"
+  },
+  "actionTitle": {
+    "message": "Anti-XAI：X AI Slop 回复探测器"
+  },
+  "extDescription": {
+    "message": "基于决策 API（Jev / Gemini）探测 X（推特）评论区的 AI Slop 回复：纯只读 DOM 抽取并在每条回复上标注 AI 率，不请求 X 接口、不执行屏蔽。"
+  }
+}

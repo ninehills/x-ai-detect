@@ -1,0 +1,478 @@
+{
+  "2123335271387369760": {
+    "score": 0.0144,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:12:57.196533+00:00"
+  },
+  "2123340266027602307": {
+    "score": 0.0311,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:26:35.215197+00:00"
+  },
+  "2122742811321868443": {
+    "score": 0.0264,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:42.484340+00:00"
+  },
+  "2122703196749709797": {
+    "score": 0.0484,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:43.939731+00:00"
+  },
+  "2123265431545008567": {
+    "score": 0.1161,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:45.475846+00:00"
+  },
+  "2122249939946545523": {
+    "score": 0.7889,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:46.886258+00:00"
+  },
+  "2121880959348052407": {
+    "score": 0.8528,
+    "category": "likely_ai",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:48.496134+00:00"
+  },
+  "2121657128813465780": {
+    "score": 0.9521,
+    "category": "ai_slop",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:15:50.637134+00:00"
+  },
+  "2123328046069633377": {
+    "score": 0.0617,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:37:25.730829+00:00"
+  },
+  "2123223414207074751": {
+    "score": 0.0367,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T09:52:34.795146+00:00"
+  },
+  "2123274172998836676": {
+    "score": 0.1753,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:26.683617+00:00"
+  },
+  "2123336758666682603": {
+    "score": 0.0347,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284313+00:00"
+  },
+  "2123211207968756083": {
+    "score": 0.1181,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123218727441440940": {
+    "score": 0.0999,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123207654009122821": {
+    "score": 0.0375,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123277246748377212": {
+    "score": 0.033,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123290824893165800": {
+    "score": 0.1293,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123324741956317513": {
+    "score": 0.0923,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123311538954223748": {
+    "score": 0.0602,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123224892867043644": {
+    "score": 0.2219,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123230079975321754": {
+    "score": 0.239,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123274425491661018": {
+    "score": 0.1693,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123250837887869016": {
+    "score": 0.0578,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123224275830394902": {
+    "score": 0.0554,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.285471+00:00"
+  },
+  "2123262906511048725": {
+    "score": 0.1252,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123272830116872505": {
+    "score": 0.169,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123320901886505152": {
+    "score": 0.2897,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123317463303741499": {
+    "score": 0.0803,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123305175603634586": {
+    "score": 0.1919,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123301588119011334": {
+    "score": 0.2394,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123289552827879471": {
+    "score": 0.1573,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123293862617841952": {
+    "score": 0.3647,
+    "category": "ai_slop",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123299946095132875": {
+    "score": 0.2449,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123296904943636656": {
+    "score": 0.0361,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123290261337808970": {
+    "score": 0.0541,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123321013475876989": {
+    "score": 0.2299,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:55.284840+00:00"
+  },
+  "2123234860596617612": {
+    "score": 0.0397,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:57.088092+00:00"
+  },
+  "2123232900321890329": {
+    "score": 0.3188,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123237212263465047": {
+    "score": 0.12,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123211539003949236": {
+    "score": 0.064,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123225115106365860": {
+    "score": 0.333,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123221707972661322": {
+    "score": 0.0522,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123209279209603295": {
+    "score": 0.4675,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123273992094269717": {
+    "score": 0.178,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123254635821412863": {
+    "score": 0.1982,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123236380973347219": {
+    "score": 0.0586,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123267666383413399": {
+    "score": 0.3014,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123224785329291463": {
+    "score": 0.4805,
+    "category": "ai_slop",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2123260145023254869": {
+    "score": 0.2434,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:56.925552+00:00"
+  },
+  "2122988822308995207": {
+    "score": 0.162,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:57.297501+00:00"
+  },
+  "2123052129929810224": {
+    "score": 0.3072,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:57.297501+00:00"
+  },
+  "2122925747283399046": {
+    "score": 0.0783,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122992904012804332": {
+    "score": 0.1512,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122926209600549326": {
+    "score": 0.0515,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122927353341128959": {
+    "score": 0.0484,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2123221145789079632": {
+    "score": 0.181,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2123187487430651948": {
+    "score": 0.5772,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122970397914419573": {
+    "score": 0.0882,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122949962082529507": {
+    "score": 0.0387,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122975788190593411": {
+    "score": 0.0706,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122948445162160325": {
+    "score": 0.0554,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122969154336755884": {
+    "score": 0.1788,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122936633901318574": {
+    "score": 0.1495,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.562435+00:00"
+  },
+  "2122958879298613270": {
+    "score": 0.0478,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.675784+00:00"
+  },
+  "2122989006266995106": {
+    "score": 0.0861,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.675784+00:00"
+  },
+  "2123041283757466059": {
+    "score": 0.4449,
+    "category": "ai_slop",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.675784+00:00"
+  },
+  "2122986989867970627": {
+    "score": 0.3019,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.675784+00:00"
+  },
+  "2122938616737599648": {
+    "score": 0.0481,
+    "category": "human",
+    "error": null,
+    "model": "gemini-decision-1",
+    "updated_at": "2026-11-19T13:39:58.675784+00:00"
+  }
+}

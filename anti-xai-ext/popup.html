@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Anti-XAI：X AI Slop 回复探测器</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; width: 320px; margin: 0; padding: 14px; color: #0f1419; }
+    h1 { font-size: 14px; margin: 0 0 10px 0; display: flex; align-items: center; justify-content: space-between; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin: 8px 0; font-size: 13px; }
+    .badge { background: #eff3f4; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+    .badge.ok { background: #e6f6ee; color: #047857; }
+    .badge.warn { background: #fef3c7; color: #b45309; }
+    .badge.mock { background: #e0f2fe; color: #0369a1; }
+    button { font-size: 13px; padding: 7px 12px; border-radius: 8px; border: 1px solid #cfd9de; background: white; cursor: pointer; font-weight: 600; }
+    button.primary { background: #0f1419; color: white; border-color: #0f1419; }
+    .actions { display: flex; gap: 8px; margin-top: 12px; }
+    .stats { font-size: 12px; color: #536471; line-height: 1.6; }
+    .toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .hint { font-size: 11px; color: #536471; margin-top: 10px; line-height: 1.5; }
+    .warn-box { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 12px; display: none; }
+  </style>
+</head>
+<body>
+  <h1>
+    <span>Anti-XAI 探测器</span>
+    <span class="badge" id="jevBadge">检查中…</span>
+  </h1>
+
+  <div class="row">
+    <span class="stats" id="stats">今日：探测 0 · 高 AI 0</span>
+  </div>
+
+  <div class="row">
+    <label class="toggle"><input type="checkbox" id="detectEnabled"> 浏览时自动探测回复并标注 AI 率</label>
+  </div>
+
+  <div class="warn-box" id="needConfig">
+    尚未配置 Jev API 接口与 Key，当前不会执行探测（不依赖本地规则）。请先前往设置页填写。
+  </div>
+
+  <div class="actions">
+    <button class="primary" id="optionsBtn">设置 Jev 接口</button>
+    <button id="logBtn">探测记录</button>
+  </div>
+
+  <div class="hint">
+    纯只读探测：仅从回复页抽取信息并在每条回复上标注 AI 率，不请求 X 接口、不执行隐藏或屏蔽。<br>
+    基于 <a href="https://chromewebstore.google.com/detail/x-%E9%BB%84%E6%8E%A8%E5%B1%8F%E8%94%BD%E5%99%A8/paaidifphnonojfblgioamenkigglhed" target="_blank" rel="noopener noreferrer">X 黄推屏蔽器</a> 改造。
+  </div>
+
+  <script src="store.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anti-XAI 提示词修改与回归验证</title>
+<style>
+  :root {
+    --bg: #f6f8fa; --card: #ffffff; --text: #0f1419; --muted: #536471; --line: #e2e8f0;
+    --accent: #1d9bf0; --accent-soft: #e8f5fe; --ai: #e11d48; --ai-soft: #ffe4e6;
+    --human: #059669; --human-soft: #d1fae5; --warn: #d97706; --warn-soft: #fef3c7;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0f14; --card: #151c24; --text: #e7e9ea; --muted: #8b98a5; --line: #26313d;
+      --accent-soft: #102a3c; --ai-soft: #3b101d; --human-soft: #0c2e22; --warn-soft: #3a2608;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; }
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line);
+    padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .nav-group { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; text-decoration: none;
+    color: var(--muted); border: 1px solid transparent;
+  }
+  .nav-link.active { background: var(--accent-soft); color: var(--accent); border-color: rgba(29,155,240,.3); }
+  .nav-link:hover:not(.active) { background: var(--bg); color: var(--text); }
+  .env-pill { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--muted); font-weight: 600; }
+
+  .wrap { max-width: 1180px; margin: 18px auto; padding: 0 16px 48px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  h2 { font-size: 16px; margin: 0 0 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  label { display: block; font-size: 13px; font-weight: 700; margin: 10px 0 4px; }
+  textarea, input[type=text] {
+    width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg); color: var(--text); line-height: 1.55;
+  }
+  textarea { min-height: 180px; resize: vertical; }
+  .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 820px) { .cat-grid { grid-template-columns: 1fr; } }
+  .cat-grid textarea { min-height: 74px; font-size: 12px; }
+
+  .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .threshold-box {
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px;
+    background: var(--bg); border: 1px solid var(--line); flex: 1; min-width: 280px;
+  }
+  .threshold-box input[type=range] { flex: 1; }
+  button {
+    font: inherit; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer;
+  }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button.danger { background: var(--ai); color: #fff; border-color: var(--ai); }
+  button:disabled { opacity: .45; cursor: default; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 12px; }
+  @media (max-width: 820px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { padding: 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); text-align: center; }
+  .kpi .val { font-size: 24px; font-weight: 800; line-height: 1.2; }
+  .kpi .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.f1 .val { color: var(--accent); }
+
+  .cm-row { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .cm-pill { padding: 4px 10px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); font-weight: 600; }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tab-btn { padding: 6px 12px; border-radius: 999px; font-size: 12px; }
+  .tab-btn.active { background: var(--accent-soft); color: var(--accent); border-color: rgba(29,155,240,.35); }
+
+  .item-card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; background: var(--bg);
+  }
+  .item-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .author-mini { display: flex; align-items: center; gap: 8px; }
+  .avatar-link { display: inline-block; border-radius: 50%; flex-shrink: 0; }
+  .avatar-link:hover { box-shadow: 0 0 0 2px var(--accent); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: var(--line); display: block; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .tag.fp { background: var(--warn-soft); color: var(--warn); }
+  .tag.fn { background: var(--ai-soft); color: var(--ai); }
+  .tag.ok { background: var(--human-soft); color: var(--human); }
+  .tag.err { background: var(--line); color: var(--muted); }
+  .post-mini { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .reply-body { font-size: 14px; white-space: pre-wrap; word-break: break-word; margin-bottom: 8px; }
+  .item-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; }
+  .msg { font-size: 13px; margin-left: 6px; }
+  .empty { text-align: center; padding: 32px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="nav-group">
+    <a class="nav-link" href="/">🏷️ 人工标注台</a>
+    <a class="nav-link active" href="/regression">🧪 提示词修改与回归验证</a>
+  </div>
+  <div class="env-pill" id="envBadge">加载配置中…</div>
+</div>
+
+<div class="wrap">
+
+  <section class="card">
+    <h2>
+      <span>1. 修改 Jev 提示词与阈值</span>
+      <span style="font-size:12px;font-weight:500;color:var(--muted)" id="labeledSummary">人工已标保留样本：加载中…</span>
+    </h2>
+
+    <div style="margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);border:1px solid rgba(29,155,240,.28);font-size:12px;line-height:1.6">
+      <b>与 Chrome 插件严格对齐（不主动请求 X 接口）：</b><br>
+      • <b>参与模型判断的 6 个字段（纯回复页 DOM 抽取）</b>：<code>post_text</code>、<code>author.name</code>、<code>author.handle</code>、<code>author.blue_verified</code>、<code>reply_text</code>、<code>has_media</code><br>
+      • <b>仅辅助人工标注的字段（不传给模型）</b>：<code>author.bio</code>、注册时间、粉丝/关注/发帖数、头像、点赞/浏览量等
+    </div>
+
+    <label for="instructions">AI Slop 判定主提示词（noul 问题）</label>
+    <textarea id="instructions"></textarea>
+
+    <div class="cat-grid">
+      <div>
+        <label for="catHuman">分类标准：human（人类）</label>
+        <textarea id="catHuman"></textarea>
+      </div>
+      <div>
+        <label for="catLikely">分类标准：likely_ai（疑似 AI）</label>
+        <textarea id="catLikely"></textarea>
+      </div>
+      <div>
+        <label for="catSlop">分类标准：ai_slop（典型 AI Slop）</label>
+        <textarea id="catSlop"></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="threshold-box">
+        <span style="font-weight:700;white-space:nowrap">AI 判定阈值：<b id="thVal">60%</b></span>
+        <input type="range" id="thresholdSlider" min="5" max="95" step="1" value="60">
+        <button id="bestThBtn" title="基于当前回归分数自动搜索最高 F1 阈值">✨ 最佳 F1 阈值</button>
+      </div>
+      <label style="display:inline-flex;align-items:center;gap:6px;margin:0;cursor:pointer">
+        <input type="checkbox" id="useThread" checked> 整楼批量判定
+      </label>
+    </div>
+
+    <div class="row">
+      <button id="savePromptBtn">💾 保存提示词与阈值</button>
+      <button class="primary" id="runRegBtn">🚀 运行批量回归验证</button>
+      <button class="danger" id="stopRegBtn" style="display:none">⏹ 停止回归</button>
+      <button id="copyJsonBtn">📋 复制配置 JSON（粘贴到插件）</button>
+      <button id="importJsonBtn">📥 导入配置 JSON</button>
+      <span class="msg" id="statusMsg"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>
+      <span>2. 回归验证指标（拖动上方阈值可实时重算 F1 与不一致样本）</span>
+      <span style="font-size:12px;font-weight:500;color:var(--muted)" id="runMeta">尚未运行回归</span>
+    </h2>
+    <div class="kpi-grid">
+      <div class="kpi f1"><div class="val" id="mF1">-</div><div class="lbl">F1 Score</div></div>
+      <div class="kpi"><div class="val" id="mPrec">-</div><div class="lbl">Precision (精确率)</div></div>
+      <div class="kpi"><div class="val" id="mRec">-</div><div class="lbl">Recall (召回率)</div></div>
+      <div class="kpi"><div class="val" id="mAcc">-</div><div class="lbl">Accuracy (准确率)</div></div>
+      <div class="kpi"><div class="val" id="mMismatch">-</div><div class="lbl">不一致样本数 (FP+FN)</div></div>
+    </div>
+    <div class="cm-row" id="cmRow"></div>
+  </section>
+
+  <section class="card">
+    <h2>3. 不一致样本排查</h2>
+    <div class="tabs" id="filterTabs">
+      <button class="tab-btn active" data-f="mismatch">全部不一致 (FP + FN)</button>
+      <button class="tab-btn" data-f="fp">误报 FP（人标人类 · 模型判 AI）</button>
+      <button class="tab-btn" data-f="fn">漏报 FN（人标 AI · 模型判人类）</button>
+      <button class="tab-btn" data-f="error">API 异常</button>
+      <button class="tab-btn" data-f="all">全部回归样本</button>
+    </div>
+    <div id="mismatchList"><div class="empty">暂无回归数据。请先在「人工标注台」标注样本，再点击「🚀 运行批量回归验证」。</div></div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let latestReport = null;
+let curFilter = 'mismatch';
+let pollTimer = null;
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function getThreshold() {
+  return Number($('thresholdSlider').value) / 100;
+}
+
+function getPromptPayload() {
+  return {
+    schema_version: 1,
+    threshold: getThreshold(),
+    use_thread_context: $('useThread').checked,
+    input_fields: ['post_text', 'author.name', 'author.handle', 'author.blue_verified', 'reply_text', 'has_media'],
+    instructions: $('instructions').value.trim(),
+    categories: {
+      human: $('catHuman').value.trim(),
+      likely_ai: $('catLikely').value.trim(),
+      ai_slop: $('catSlop').value.trim()
+    }
+  };
+}
+
+function computeMetrics(rows, th) {
+  let tp = 0, fp = 0, tn = 0, fn = 0, errs = 0;
+  for (const r of rows) {
+    if (typeof r.score !== 'number') { errs++; continue; }
+    const predAi = r.score >= th;
+    const trueAi = !!r.human_is_ai;
+    if (predAi && trueAi) tp++;
+    else if (predAi && !trueAi) fp++;
+    else if (!predAi && !trueAi) tn++;
+    else fn++;
+  }
+  const valid = tp + fp + tn + fn;
+  const prec = (tp + fp) ? tp / (tp + fp) : 0;
+  const rec = (tp + fn) ? tp / (tp + fn) : 0;
+  const f1 = (prec + rec) ? (2 * prec * rec) / (prec + rec) : 0;
+  const acc = valid ? (tp + tn) / valid : 0;
+  return { tp, fp, tn, fn, errs, valid, prec, rec, f1, acc };
+}
+
+function pctStr(v) {
+  return (v * 100).toFixed(1) + '%';
+}
+
+function renderReport() {
+  if (!latestReport || !Array.isArray(latestReport.rows)) return;
+  const th = getThreshold();
+  const rows = latestReport.rows;
+  const m = computeMetrics(rows, th);
+
+  $('runMeta').textContent = `最近回归：${new Date(latestReport.ran_at).toLocaleString()} · 模型 ${latestReport.model} · 耗时 ${latestReport.elapsed_sec}s · 共 ${rows.length} 条`;
+  $('mF1').textContent = m.valid ? pctStr(m.f1) : '-';
+  $('mPrec').textContent = m.valid ? pctStr(m.prec) : '-';
+  $('mRec').textContent = m.valid ? pctStr(m.rec) : '-';
+  $('mAcc').textContent = m.valid ? pctStr(m.acc) : '-';
+  $('mMismatch').textContent = String(m.fp + m.fn);
+  $('cmRow').innerHTML = `
+    <span class="cm-pill">TP (命中 AI): ${m.tp}</span>
+    <span class="cm-pill">FP (误报): ${m.fp}</span>
+    <span class="cm-pill">FN (漏报): ${m.fn}</span>
+    <span class="cm-pill">TN (正确人类): ${m.tn}</span>
+    <span class="cm-pill">API 异常: ${m.errs}</span>
+    <span class="cm-pill">当前阈值: ${Math.round(th * 100)}%</span>
+  `;
+
+  const classified = rows.map(r => {
+    if (typeof r.score !== 'number') return { ...r, kind: 'error' };
+    const predAi = r.score >= th;
+    const trueAi = !!r.human_is_ai;
+    const kind = predAi === trueAi ? 'ok' : (predAi ? 'fp' : 'fn');
+    return { ...r, predAi, kind };
+  });
+
+  const shown = classified.filter(r => {
+    if (curFilter === 'mismatch') return r.kind === 'fp' || r.kind === 'fn';
+    if (curFilter === 'all') return true;
+    return r.kind === curFilter;
+  });
+
+  shown.sort((a, b) => Math.abs((b.score ?? 0.5) - th) - Math.abs((a.score ?? 0.5) - th));
+
+  const box = $('mismatchList');
+  if (!shown.length) {
+    box.innerHTML = `<div class="empty">当前筛选（${curFilter}）下没有样本 🎉</div>`;
+    return;
+  }
+
+  box.innerHTML = shown.map(r => {
+    const a = r.author || {};
+    const profileUrl = a.handle ? `https://x.com/${encodeURIComponent(a.handle)}` : '#';
+    const scoreTxt = typeof r.score === 'number' ? `AI ${Math.round(r.score * 100)}%` : '异常';
+    const kindTag = r.kind === 'fp'
+      ? '<span class="tag fp">FP 误报（人标人类 · 模型判 AI）</span>'
+      : r.kind === 'fn'
+        ? '<span class="tag fn">FN 漏报（人标 AI · 模型判人类）</span>'
+        : r.kind === 'error'
+          ? '<span class="tag err">API 异常</span>'
+          : '<span class="tag ok">一致</span>';
+
+    return `<div class="item-card">
+      <div class="item-head">
+        <div class="author-mini">
+          <a class="avatar-link" href="${esc(profileUrl)}" target="_blank" rel="noopener" title="打开 @${esc(a.handle || '')} 主页">
+            ${a.avatar_url ? `<img class="avatar" src="${esc(a.avatar_url)}" alt="">` : `<div class="avatar"></div>`}
+          </a>
+          <div>
+            <a href="${esc(profileUrl)}" target="_blank" rel="noopener" style="font-weight:700;color:var(--text)">${esc(a.name || a.handle || '未知')}</a>
+            <a href="${esc(profileUrl)}" target="_blank" rel="noopener" style="color:var(--muted);margin-left:4px">@${esc(a.handle || '')}</a>
+            <span style="font-size:12px;color:var(--muted);margin-left:6px">回复 @${esc(r.target_account || '')}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          ${kindTag}
+          <span class="tag" style="background:var(--accent-soft);color:var(--accent)">模型: ${scoreTxt}</span>
+          <span class="tag" style="background:var(--card);border:1px solid var(--line)">人工: ${r.human_is_ai ? 'AI 生成' : '人类回复'}</span>
+        </div>
+      </div>
+      <div class="post-mini">原帖：${esc((r.post_text || '').slice(0, 140))}</div>
+      <div class="reply-body">${esc(r.reply_text || '(无文字)')}</div>
+      ${r.error ? `<div style="font-size:12px;color:var(--ai);margin-bottom:6px">错误：${esc(r.error)}</div>` : ''}
+      <div class="item-foot">
+        <div>
+          ${r.reply_url ? `<a href="${esc(r.reply_url)}" target="_blank" rel="noopener">查看回复 ↗</a>` : ''}
+          ${r.post_url ? ` · <a href="${esc(r.post_url)}" target="_blank" rel="noopener">查看原帖 ↗</a>` : ''}
+          ${r.label_note ? ` · 备注: ${esc(r.label_note)}` : ''}
+        </div>
+        <div style="display:flex;gap:6px">
+          <button type="button" data-fix-ai="${esc(r.reply_id)}" style="padding:4px 10px;font-size:12px">改标为 AI</button>
+          <button type="button" data-fix-human="${esc(r.reply_id)}" style="padding:4px 10px;font-size:12px">改标为人类</button>
+          <button type="button" data-fix-discard="${esc(r.reply_id)}" style="padding:4px 10px;font-size:12px">舍弃</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  box.querySelectorAll('[data-fix-ai]').forEach(b => b.addEventListener('click', () => fixLabel(b.dataset.fixAi, 'keep', true)));
+  box.querySelectorAll('[data-fix-human]').forEach(b => b.addEventListener('click', () => fixLabel(b.dataset.fixHuman, 'keep', false)));
+  box.querySelectorAll('[data-fix-discard]').forEach(b => b.addEventListener('click', () => fixLabel(b.dataset.fixDiscard, 'discard', null)));
+}
+
+async function fixLabel(reply_id, decision, is_ai) {
+  const res = await fetch('/api/label', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reply_id, decision, is_ai })
+  }).then(r => r.json());
+  if (!res.ok) return alert('更新标注失败');
+  if (latestReport?.rows) {
+    if (decision === 'discard') {
+      latestReport.rows = latestReport.rows.filter(r => r.reply_id !== reply_id);
+    } else {
+      const target = latestReport.rows.find(r => r.reply_id === reply_id);
+      if (target) target.human_is_ai = !!is_ai;
+    }
+    renderReport();
+  }
+  refreshLabeledCount();
+}
+
+$('thresholdSlider').addEventListener('input', () => {
+  $('thVal').textContent = `${$('thresholdSlider').value}%`;
+  renderReport();
+});
+
+$('bestThBtn').addEventListener('click', () => {
+  if (!latestReport?.rows?.length) return alert('请先运行一次回归验证');
+  let bestTh = 60, bestF1 = -1;
+  for (let t = 5; t <= 95; t++) {
+    const m = computeMetrics(latestReport.rows, t / 100);
+    if (m.f1 > bestF1) { bestF1 = m.f1; bestTh = t; }
+  }
+  $('thresholdSlider').value = bestTh;
+  $('thVal').textContent = `${bestTh}%`;
+  $('statusMsg').textContent = `最佳 F1 阈值：${bestTh}%（F1 = ${pctStr(bestF1)}）`;
+  renderReport();
+});
+
+$('savePromptBtn').addEventListener('click', async () => {
+  const res = await fetch('/api/prompt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(getPromptPayload())
+  }).then(r => r.json());
+  $('statusMsg').textContent = res.ok ? '✅ 提示词与阈值已保存' : '❌ 保存失败';
+});
+
+$('runRegBtn').addEventListener('click', async () => {
+  const res = await fetch('/api/regression/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(getPromptPayload())
+  }).then(r => r.json());
+  if (!res.ok) return alert('启动回归失败：' + (res.error || ''));
+  pollRegression();
+});
+
+$('copyJsonBtn').addEventListener('click', async () => {
+  const txt = JSON.stringify(getPromptPayload(), null, 2);
+  try {
+    await navigator.clipboard.writeText(txt);
+    $('statusMsg').textContent = '✅ 已复制配置 JSON，可直接粘贴到插件设置页';
+  } catch (_) {
+    prompt('请复制以下配置 JSON：', txt);
+  }
+});
+
+$('importJsonBtn').addEventListener('click', async () => {
+  const raw = prompt('请粘贴 prompt_config.json 内容：');
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.instructions !== 'string' || !parsed.instructions.trim()) {
+      throw new Error('缺少有效的 instructions 字段');
+    }
+    const res = await fetch('/api/prompt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(parsed)
+    }).then(r => r.json());
+    if (!res.ok) throw new Error('保存失败');
+    await init();
+    $('statusMsg').textContent = '✅ 已导入配置 JSON 并保存';
+  } catch (e) {
+    alert('JSON 导入失败：' + (e.message || e));
+  }
+});
+
+$('stopRegBtn').addEventListener('click', async () => {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  $('runRegBtn').disabled = false;
+  $('stopRegBtn').style.display = 'none';
+  $('statusMsg').textContent = '⏹ 已停止回归';
+  await fetch('/api/regression/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+});
+
+async function pollRegression() {
+  const data = await fetch('/api/regression/status').then(r => r.json()).catch(() => null);
+  if (!data) return;
+  const job = data.job || {};
+  if (data.latest) {
+    latestReport = data.latest;
+    renderReport();
+  }
+  if (job.running) {
+    $('runRegBtn').disabled = true;
+    $('stopRegBtn').style.display = '';
+    $('statusMsg').textContent = `⏳ 回归验证中：${job.done} / ${job.total}${job.errors ? `（异常 ${job.errors}）` : ''}`;
+    if (!pollTimer) pollTimer = setInterval(pollRegression, 1200);
+  } else {
+    $('runRegBtn').disabled = false;
+    $('stopRegBtn').style.display = 'none';
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+      $('statusMsg').textContent = job.last_error ? `⚠️ 回归结束（有错误：${job.last_error}）` : '✅ 回归验证完成';
+    }
+  }
+}
+
+$('filterTabs').querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    curFilter = btn.dataset.f;
+    $('filterTabs').querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    renderReport();
+  });
+});
+
+async function refreshLabeledCount() {
+  const d = await fetch('/api/dataset').then(r => r.json());
+  const keptAi = (d.items || []).filter(x => x.label?.decision === 'keep' && x.label?.is_ai === true).length;
+  const keptHuman = (d.items || []).filter(x => x.label?.decision === 'keep' && x.label?.is_ai === false).length;
+  $('labeledSummary').textContent = `可参与回归的人工标注样本：${keptAi + keptHuman} 条（AI ${keptAi} · 人类 ${keptHuman}）`;
+}
+
+async function init() {
+  const cfg = await fetch('/api/config').then(r => r.json());
+  $('envBadge').textContent = `${cfg.jev_model} · ${cfg.has_key ? '密钥已配置' : '⚠️ 缺少 JEV_API_KEY'}`;
+  const pc = cfg.prompt_config || {};
+  $('instructions').value = pc.instructions || '';
+  $('catHuman').value = pc.categories?.human || '';
+  $('catLikely').value = pc.categories?.likely_ai || '';
+  $('catSlop').value = pc.categories?.ai_slop || '';
+  const thPct = Math.round((pc.threshold ?? 0.6) * 100);
+  $('thresholdSlider').value = thPct;
+  $('thVal').textContent = `${thPct}%`;
+  $('useThread').checked = pc.use_thread_context !== false;
+
+  await refreshLabeledCount();
+  await pollRegression();
+}
+
+init();
+</script>
+</body>
+</html>

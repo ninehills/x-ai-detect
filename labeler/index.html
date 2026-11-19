@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anti-XAI 数据集人工标注台</title>
+<style>
+  :root {
+    --bg: #f6f8fa; --card: #ffffff; --text: #0f1419; --muted: #536471; --line: #e2e8f0;
+    --accent: #1d9bf0; --accent-soft: #e8f5fe; --ai: #e11d48; --ai-soft: #ffe4e6;
+    --human: #059669; --human-soft: #d1fae5; --warn: #d97706; --warn-soft: #fef3c7;
+    --discard: #64748b; --discard-soft: #f1f5f9; --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0f14; --card: #151c24; --text: #e7e9ea; --muted: #8b98a5; --line: #26313d;
+      --accent-soft: #102a3c; --ai-soft: #3b101d; --human-soft: #0c2e22; --warn-soft: #3a2608; --discard-soft: #1e2630;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif; }
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--card); border-bottom: 1px solid var(--line);
+    padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .nav-group { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; text-decoration: none;
+    color: var(--muted); border: 1px solid transparent;
+  }
+  .nav-link.active { background: var(--accent-soft); color: var(--accent); border-color: rgba(29,155,240,.3); }
+  .nav-link:hover:not(.active) { background: var(--bg); color: var(--text); }
+
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; align-items: center; }
+  .stat-pill { padding: 3px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-weight: 600; }
+  .stat-pill.ai { background: var(--ai-soft); color: var(--ai); border-color: transparent; }
+  .stat-pill.human { background: var(--human-soft); color: var(--human); border-color: transparent; }
+  .stat-pill.discard { background: var(--discard-soft); color: var(--discard); border-color: transparent; }
+
+  .controls {
+    padding: 10px 20px; background: var(--card); border-bottom: 1px solid var(--line);
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  select, input[type=text] {
+    font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--text);
+  }
+  input[type=text] { min-width: 180px; flex: 1; max-width: 280px; }
+  label.inline { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; }
+  button {
+    font: inherit; font-size: 13px; font-weight: 600; padding: 6px 13px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer;
+    transition: transform .1s ease, opacity .1s ease, background .15s ease;
+  }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  button:hover:not(:disabled) { transform: translateY(-1px); }
+  button:disabled { opacity: .45; cursor: default; transform: none; }
+
+  .layout { max-width: 1200px; margin: 18px auto; padding: 0 16px 40px; display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
+  @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; }
+  .section-title { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .3px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .post-text { font-size: 14px; white-space: pre-wrap; word-break: break-word; color: var(--text); opacity: .92; }
+  .reply-text { font-size: 17px; line-height: 1.65; white-space: pre-wrap; word-break: break-word; margin: 12px 0; }
+  .author-row { display: flex; gap: 12px; align-items: flex-start; }
+  .avatar-link { display: inline-block; flex-shrink: 0; border-radius: 50%; transition: transform .15s ease, box-shadow .15s ease; }
+  .avatar-link:hover { transform: scale(1.06); box-shadow: 0 0 0 2px var(--accent); }
+  .avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; background: var(--line); display: block; }
+  .author-meta { font-size: 12px; color: var(--muted); margin-top: 2px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .bio { margin-top: 6px; padding: 7px 10px; border-radius: 8px; background: var(--bg); font-size: 12px; color: var(--muted); }
+  .metrics { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 10px; flex-wrap: wrap; }
+  a { color: var(--accent); text-decoration: none; }
+
+  .jev-box {
+    margin: 12px 0; padding: 10px 14px; border-radius: 10px; background: var(--bg);
+    border: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  }
+  .jev-box.high { border-color: rgba(225,29,72,.45); background: var(--ai-soft); }
+  .jev-box.mid { border-color: rgba(217,119,6,.45); background: var(--warn-soft); }
+  .jev-box.low { border-color: rgba(5,150,105,.35); background: var(--human-soft); }
+  .jev-info { font-size: 13px; font-weight: 600; }
+
+  .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  @media (max-width: 600px) { .action-grid { grid-template-columns: 1fr; } }
+  .act-btn {
+    padding: 14px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--bg);
+    font-size: 15px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .act-btn small { font-size: 11px; font-weight: 500; opacity: .75; }
+  .act-btn.ai { border-color: rgba(225, 29, 72, .45); color: var(--ai); }
+  .act-btn.ai.active, .act-btn.ai:hover { background: var(--ai); color: #fff; border-color: var(--ai); }
+  .act-btn.human { border-color: rgba(5, 150, 105, .45); color: var(--human); }
+  .act-btn.human.active, .act-btn.human:hover { background: var(--human); color: #fff; border-color: var(--human); }
+  .act-btn.discard { border-color: rgba(100, 116, 139, .45); color: var(--discard); }
+  .act-btn.discard.active, .act-btn.discard:hover { background: var(--discard); color: #fff; border-color: var(--discard); }
+
+  .sub-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  .sub-actions input { flex: 1; min-width: 180px; max-width: none; }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+  .queue { max-height: calc(100vh - 165px); overflow-y: auto; }
+  .q-item {
+    padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; cursor: pointer;
+    margin-bottom: 6px; font-size: 12px; background: var(--bg);
+  }
+  .q-item.current { border-color: var(--accent); background: var(--accent-soft); }
+  .q-head { display: flex; justify-content: space-between; gap: 6px; font-weight: 600; align-items: center; }
+  .q-text { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .tag { padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .tag.ai { background: var(--ai-soft); color: var(--ai); }
+  .tag.human { background: var(--human-soft); color: var(--human); }
+  .tag.mid { background: var(--warn-soft); color: var(--warn); }
+  .tag.discard { background: var(--discard-soft); color: var(--discard); }
+  .tag.todo { background: var(--line); color: var(--muted); }
+  .empty { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .kbd { display: inline-block; padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); font-size: 11px; font-family: ui-monospace, monospace; background: var(--card); color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="nav-group">
+    <a class="nav-link active" href="/">🏷️ 人工标注台</a>
+    <a class="nav-link" href="/regression">🧪 提示词修改与回归验证</a>
+  </div>
+  <div class="stats" id="statsBar">加载中…</div>
+</div>
+
+<div class="controls">
+  <select id="accountFilter">
+    <option value="all">全部博主</option>
+    <option value="9hills">@9hills</option>
+    <option value="shao__meng">@shao__meng</option>
+    <option value="op7418">@op7418</option>
+  </select>
+  <select id="statusFilter">
+    <option value="unlabeled">仅未标注</option>
+    <option value="all">全部样本</option>
+    <option value="ai">已标：AI 生成</option>
+    <option value="human">已标：人类回复</option>
+    <option value="keep">已标：保留样本</option>
+    <option value="discard">已标：舍弃样本</option>
+  </select>
+  <select id="sortBy">
+    <option value="default">默认顺序</option>
+    <option value="ai_desc">Jev AI 率从高到低</option>
+    <option value="ai_asc">Jev AI 率从低到高</option>
+  </select>
+  <label class="inline"><input type="checkbox" id="hideOp" checked> 隐藏博主自回复</label>
+  <label class="inline"><input type="checkbox" id="autoNext" checked> 标注后自动下一条</label>
+  <input type="text" id="searchInput" placeholder="搜索回复、原帖、@handle…">
+  <select id="batchLimit" title="每次批量生成 AI 建议的条数">
+    <option value="50">生成 50 条</option>
+    <option value="100" selected>生成 100 条</option>
+    <option value="200">生成 200 条</option>
+    <option value="500">生成 500 条</option>
+    <option value="0">生成全部</option>
+  </select>
+  <button class="primary" id="batchSuggestBtn">🤖 批量生成 AI 建议</button>
+  <button id="exportKeptBtn">导出保留 JSONL</button>
+  <button id="exportAllBtn">导出全部 JSONL</button>
+</div>
+
+<div class="layout">
+  <main id="mainArea"></main>
+  <aside class="card">
+    <div class="section-title">
+      <span>当前队列</span>
+      <span id="queueCount">0 条</span>
+    </div>
+    <div class="queue" id="queueList"></div>
+  </aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let allItems = [];
+let filtered = [];
+let curIdx = 0;
+let threshold = 0.60;
+let batchPollTimer = null;
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function fmtDate(s) {
+  if (!s) return '-';
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? s : d.toLocaleString();
+}
+
+function labelBadge(lb) {
+  if (!lb) return '<span class="tag todo">未标</span>';
+  if (lb.decision === 'discard') return '<span class="tag discard">舍弃</span>';
+  if (lb.is_ai === true) return '<span class="tag ai">保留·AI</span>';
+  if (lb.is_ai === false) return '<span class="tag human">保留·人类</span>';
+  return '<span class="tag todo">保留</span>';
+}
+
+function suggestionTag(sg) {
+  if (!sg || typeof sg.score !== 'number') return '';
+  const pct = Math.round(sg.score * 100);
+  const cls = sg.score >= threshold ? 'ai' : sg.score >= 0.35 ? 'mid' : 'human';
+  return `<span class="tag ${cls}">AI ${pct}%</span>`;
+}
+
+function renderStats() {
+  const total = allItems.length;
+  const labeled = allItems.filter(x => x.label).length;
+  const suggested = allItems.filter(x => typeof x.suggestion?.score === 'number').length;
+  const kept = allItems.filter(x => x.label?.decision === 'keep').length;
+  const discard = allItems.filter(x => x.label?.decision === 'discard').length;
+  const ai = allItems.filter(x => x.label?.decision === 'keep' && x.label?.is_ai === true).length;
+  const human = allItems.filter(x => x.label?.decision === 'keep' && x.label?.is_ai === false).length;
+  $('statsBar').innerHTML = `
+    <span class="stat-pill">总样本 ${total}</span>
+    <span class="stat-pill">Jev 建议 ${suggested}/${total}</span>
+    <span class="stat-pill">已标 ${labeled}</span>
+    <span class="stat-pill ai">AI ${ai}</span>
+    <span class="stat-pill human">人类 ${human}</span>
+    <span class="stat-pill discard">舍弃 ${discard}</span>
+    <span class="stat-pill">保留 ${kept}</span>
+  `;
+}
+
+function applyFilters(keepReplyId = null) {
+  const acc = $('accountFilter').value;
+  const st = $('statusFilter').value;
+  const sort = $('sortBy').value;
+  const hideOp = $('hideOp').checked;
+  const q = $('searchInput').value.trim().toLowerCase();
+
+  filtered = allItems.filter(it => {
+    if (acc !== 'all' && it.target_account !== acc) return false;
+    if (hideOp && it.is_op_reply) return false;
+    const lb = it.label;
+    if (st === 'unlabeled' && lb) return false;
+    if (st === 'ai' && !(lb?.decision === 'keep' && lb?.is_ai === true)) return false;
+    if (st === 'human' && !(lb?.decision === 'keep' && lb?.is_ai === false)) return false;
+    if (st === 'keep' && lb?.decision !== 'keep') return false;
+    if (st === 'discard' && lb?.decision !== 'discard') return false;
+    if (q) {
+      const hay = `${it.target_account} ${it.post_text} ${it.reply_text} ${it.author?.handle} ${it.author?.name} ${it.author?.bio}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if (sort === 'ai_desc') {
+    filtered.sort((a, b) => (b.suggestion?.score ?? -1) - (a.suggestion?.score ?? -1));
+  } else if (sort === 'ai_asc') {
+    filtered.sort((a, b) => (a.suggestion?.score ?? 2) - (b.suggestion?.score ?? 2));
+  }
+
+  if (keepReplyId) {
+    const found = filtered.findIndex(x => x.reply_id === keepReplyId);
+    curIdx = found >= 0 ? found : Math.min(curIdx, Math.max(0, filtered.length - 1));
+  } else {
+    curIdx = Math.min(curIdx, Math.max(0, filtered.length - 1));
+  }
+  renderStats();
+  renderMain();
+  renderQueue();
+}
+
+function renderJevBox(it) {
+  const sg = it.suggestion;
+  if (!sg) {
+    return `<div class="jev-box">
+      <div class="jev-info" style="color:var(--muted)">🤖 尚未获取 Jev AI 建议</div>
+      <button id="btnSuggestOne">获取 AI 建议 <span class="kbd">S</span></button>
+    </div>`;
+  }
+  if (sg.error || typeof sg.score !== 'number') {
+    return `<div class="jev-box">
+      <div class="jev-info" style="color:var(--muted)">🤖 Jev 建议失败：${esc(sg.error || '无分数')}</div>
+      <button id="btnSuggestOne">重试 <span class="kbd">S</span></button>
+    </div>`;
+  }
+  const pct = Math.round(sg.score * 100);
+  const cls = sg.score >= threshold ? 'high' : sg.score >= 0.35 ? 'mid' : 'low';
+  const verdict = sg.score >= threshold ? '建议：AI 生成' : '建议：人类回复';
+  return `<div class="jev-box ${cls}">
+    <div class="jev-info">
+      🤖 Jev AI 建议：<b>AI ${pct}%</b> · ${verdict}
+      ${sg.category ? `<span style="font-weight:500;opacity:.85">（分类: ${esc(sg.category)} · 阈值 ${Math.round(threshold * 100)}% · 模型 ${esc(sg.model || '')}）</span>` : ''}
+    </div>
+    <button id="btnSuggestOne">刷新建议 <span class="kbd">S</span></button>
+  </div>`;
+}
+
+function renderMain() {
+  const main = $('mainArea');
+  if (!filtered.length) {
+    main.innerHTML = `<div class="card empty">当前筛选条件下没有待显示的样本。</div>`;
+    return;
+  }
+  const it = filtered[curIdx];
+  const a = it.author || {};
+  const profileUrl = a.handle ? `https://x.com/${encodeURIComponent(a.handle)}` : '#';
+  const lb = it.label || null;
+  const isAiActive = lb?.decision === 'keep' && lb?.is_ai === true;
+  const isHumanActive = lb?.decision === 'keep' && lb?.is_ai === false;
+  const isDiscardActive = lb?.decision === 'discard';
+
+  main.innerHTML = `
+    <div class="card">
+      <div class="section-title">
+        <span>原帖 · <a href="https://x.com/${esc(it.target_account)}" target="_blank" rel="noopener">@${esc(it.target_account)}</a> · ${esc(fmtDate(it.post_created_at))}</span>
+        <a href="${esc(it.post_url)}" target="_blank" rel="noopener">查看原帖 ↗</a>
+      </div>
+      <div class="post-text">${esc(it.post_text || '(无文字)')}</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">
+        <span>回复样本 #${curIdx + 1} / ${filtered.length} ${labelBadge(lb)}</span>
+        ${it.reply_url ? `<a href="${esc(it.reply_url)}" target="_blank" rel="noopener">查看回复 ↗</a>` : ''}
+      </div>
+
+      <div class="author-row">
+        <a class="avatar-link" href="${esc(profileUrl)}" target="_blank" rel="noopener" title="点击打开 @${esc(a.handle || '')} 主页">
+          ${a.avatar_url ? `<img class="avatar" src="${esc(a.avatar_url)}" alt="@${esc(a.handle || '')}">` : `<div class="avatar"></div>`}
+        </a>
+        <div style="flex:1;min-width:0">
+          <div>
+            <a href="${esc(profileUrl)}" target="_blank" rel="noopener" style="color:var(--text);font-weight:700">${esc(a.name || a.handle || '未知')}</a>
+            <a href="${esc(profileUrl)}" target="_blank" rel="noopener" style="color:var(--muted);margin-left:4px">@${esc(a.handle || '')}</a>
+            ${a.blue_verified ? '<span class="tag" style="background:var(--accent-soft);color:var(--accent)">蓝V</span>' : ''}
+            ${it.is_op_reply ? '<span class="tag todo">博主自回复</span>' : ''}
+          </div>
+          <div class="author-meta">
+            <span class="tag todo" title="以下字段仅用于辅助人工判断，不会传给 Jev 模型（与插件纯 DOM 抽取保持一致）">仅辅助人工标注</span>
+            <span>注册: ${esc(a.created_at ? new Date(a.created_at).toISOString().slice(0, 10) : '-')}</span>
+            <span>粉丝: ${a.followers ?? '-'}</span>
+            <span>关注: ${a.following ?? '-'}</span>
+            <span>发帖: ${a.statuses ?? '-'}</span>
+            <span>回复时间: ${esc(fmtDate(it.reply_created_at))}</span>
+          </div>
+          ${a.bio ? `<div class="bio"><b>[仅辅助人工标注 · 简介]</b> ${esc(a.bio)}</div>` : ''}
+        </div>
+      </div>
+
+      <div class="reply-text">${esc(it.reply_text || '(无文字，可能仅图片/视频)')}</div>
+
+      ${renderJevBox(it)}
+
+      <div class="metrics">
+        <span>❤️ ${it.like_count ?? 0}</span>
+        <span>💬 ${it.reply_count ?? 0}</span>
+        <span>👁️ ${it.view_count ?? '-'}</span>
+        <span>语言: ${esc(it.lang || '-')}</span>
+        ${it.has_media ? `<span>📎 媒体: ${esc((it.media_types || []).join(','))}</span>` : ''}
+      </div>
+
+      <div class="action-grid">
+        <button class="act-btn ai ${isAiActive ? 'active' : ''}" id="btnAi">
+          <span>🤖 保留 · 是 AI 生成</span>
+          <small>快捷键 <span class="kbd">1</span></small>
+        </button>
+        <button class="act-btn human ${isHumanActive ? 'active' : ''}" id="btnHuman">
+          <span>👤 保留 · 人类回复</span>
+          <small>快捷键 <span class="kbd">2</span></small>
+        </button>
+        <button class="act-btn discard ${isDiscardActive ? 'active' : ''}" id="btnDiscard">
+          <span>🗑️ 舍弃样本</span>
+          <small>快捷键 <span class="kbd">3</span></small>
+        </button>
+      </div>
+
+      <div class="sub-actions">
+        <input type="text" id="noteInput" placeholder="可选备注（如：明显模板腔 / 纯表情无效样本…）" value="${esc(lb?.note || '')}">
+        <button id="btnClear" ${lb ? '' : 'disabled'}>撤销标注 <span class="kbd">U</span></button>
+      </div>
+
+      <div class="nav-row">
+        <button id="btnPrev" ${curIdx <= 0 ? 'disabled' : ''}>← 上一条 <span class="kbd">←</span></button>
+        <span style="font-size:12px;color:var(--muted)">点击头像可直达作者 X 主页 · 标注实时保存</span>
+        <button id="btnNext" ${curIdx >= filtered.length - 1 ? 'disabled' : ''}>下一条 → <span class="kbd">→</span></button>
+      </div>
+    </div>
+  `;
+
+  $('btnAi').addEventListener('click', () => submitLabel('keep', true));
+  $('btnHuman').addEventListener('click', () => submitLabel('keep', false));
+  $('btnDiscard').addEventListener('click', () => submitLabel('discard', null));
+  $('btnClear').addEventListener('click', clearLabel);
+  $('btnPrev').addEventListener('click', () => go(-1));
+  $('btnNext').addEventListener('click', () => go(1));
+  $('btnSuggestOne').addEventListener('click', suggestCurrent);
+}
+
+function renderQueue() {
+  $('queueCount').textContent = `${filtered.length} 条`;
+  const box = $('queueList');
+  if (!filtered.length) {
+    box.innerHTML = '<div class="empty" style="padding:20px">空</div>';
+    return;
+  }
+  const start = Math.max(0, curIdx - 20);
+  const end = Math.min(filtered.length, start + 80);
+  const slice = filtered.slice(start, end);
+  box.innerHTML = slice.map((it, i) => {
+    const idx = start + i;
+    return `<div class="q-item ${idx === curIdx ? 'current' : ''}" data-idx="${idx}">
+      <div class="q-head">
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">#${idx + 1} @${esc(it.author?.handle || '')}</span>
+        <span style="display:inline-flex;gap:4px">${suggestionTag(it.suggestion)}${labelBadge(it.label)}</span>
+      </div>
+      <div class="q-text">${esc(it.reply_text || '(无文字)')}</div>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('.q-item').forEach(el => {
+    el.addEventListener('click', () => {
+      curIdx = Number(el.dataset.idx);
+      renderMain();
+      renderQueue();
+    });
+  });
+}
+
+function go(delta) {
+  const next = curIdx + delta;
+  if (next < 0 || next >= filtered.length) return;
+  curIdx = next;
+  renderMain();
+  renderQueue();
+}
+
+async function suggestCurrent() {
+  const it = filtered[curIdx];
+  if (!it) return;
+  const btn = $('btnSuggestOne');
+  if (btn) { btn.disabled = true; btn.textContent = '请求 Jev 中…'; }
+  const res = await fetch('/api/suggest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reply_id: it.reply_id })
+  }).then(r => r.json()).catch(e => ({ ok: false, error: String(e) }));
+  if (res.ok && res.results?.[it.reply_id]) {
+    it.suggestion = res.results[it.reply_id];
+  } else {
+    alert('获取 AI 建议失败：' + (res.error || '未知错误'));
+  }
+  renderStats();
+  renderMain();
+  renderQueue();
+}
+
+async function pollBatchSuggest() {
+  const st = await fetch('/api/suggest/status').then(r => r.json()).catch(() => null);
+  const btn = $('batchSuggestBtn');
+  if (!st) return;
+  if (st.running) {
+    btn.textContent = `⏹ 停止生成 (${st.done}/${st.total})`;
+    btn.dataset.running = '1';
+    if (!batchPollTimer) {
+      batchPollTimer = setInterval(async () => {
+        await pollBatchSuggest();
+      }, 1800);
+    }
+  } else {
+    if (batchPollTimer) {
+      clearInterval(batchPollTimer);
+      batchPollTimer = null;
+      await reloadDataset(filtered[curIdx]?.reply_id);
+    }
+    btn.textContent = '🤖 批量生成 AI 建议';
+    btn.dataset.running = '0';
+  }
+}
+
+$('batchSuggestBtn').addEventListener('click', async () => {
+  const btn = $('batchSuggestBtn');
+  if (btn.dataset.running === '1') {
+    if (batchPollTimer) { clearInterval(batchPollTimer); batchPollTimer = null; }
+    btn.dataset.running = '0';
+    btn.textContent = '🤖 批量生成 AI 建议';
+    await fetch('/api/suggest/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    await reloadDataset(filtered[curIdx]?.reply_id);
+    return;
+  }
+  const acc = $('accountFilter').value;
+  const limit = Number($('batchLimit').value);
+  const hide_op = $('hideOp').checked;
+  const res = await fetch('/api/suggest/batch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mode: 'missing', account: acc, limit, hide_op })
+  }).then(r => r.json());
+  if (!res.ok) return alert('启动批量建议失败：' + (res.error || ''));
+  pollBatchSuggest();
+});
+
+async function submitLabel(decision, is_ai) {
+  const it = filtered[curIdx];
+  if (!it) return;
+  const note = $('noteInput')?.value || '';
+  const res = await fetch('/api/label', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reply_id: it.reply_id, decision, is_ai, note })
+  }).then(r => r.json());
+  if (!res.ok) return alert('保存失败：' + (res.error || '未知错误'));
+  it.label = res.label;
+
+  const st = $('statusFilter').value;
+  if ($('autoNext').checked) {
+    if (st === 'unlabeled') {
+      applyFilters();
+    } else {
+      renderStats();
+      if (curIdx < filtered.length - 1) curIdx++;
+      renderMain();
+      renderQueue();
+    }
+  } else {
+    applyFilters(it.reply_id);
+  }
+}
+
+async function clearLabel() {
+  const it = filtered[curIdx];
+  if (!it) return;
+  const res = await fetch('/api/label', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reply_id: it.reply_id, clear: true })
+  }).then(r => r.json());
+  if (!res.ok) return;
+  it.label = null;
+  applyFilters(it.reply_id);
+}
+
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+  if (e.key === '1') submitLabel('keep', true);
+  else if (e.key === '2') submitLabel('keep', false);
+  else if (e.key === '3') submitLabel('discard', null);
+  else if (e.key === 's' || e.key === 'S') suggestCurrent();
+  else if (e.key === 'u' || e.key === 'U') clearLabel();
+  else if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') go(-1);
+  else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') go(1);
+});
+
+['accountFilter', 'statusFilter', 'sortBy', 'hideOp'].forEach(id => $(id).addEventListener('change', () => { curIdx = 0; applyFilters(); }));
+$('searchInput').addEventListener('input', () => { curIdx = 0; applyFilters(); });
+$('exportKeptBtn').addEventListener('click', () => { location.href = '/api/export?mode=kept'; });
+$('exportAllBtn').addEventListener('click', () => { location.href = '/api/export?mode=all'; });
+
+async function reloadDataset(keepId = null) {
+  const data = await fetch('/api/dataset').then(r => r.json());
+  allItems = data.items || [];
+  threshold = data.prompt_config?.threshold ?? 0.60;
+  applyFilters(keepId);
+}
+
+async function init() {
+  await reloadDataset();
+  await pollBatchSuggest();
+}
+init();
+</script>
+</body>
+</html>

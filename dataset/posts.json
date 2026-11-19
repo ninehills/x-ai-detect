@@ -1,0 +1,548 @@
+{
+  "9hills": [
+    {
+      "created_at": "Thu Nov 19 08:38:47 +0000 2026",
+      "id": "2123335164998910280",
+      "reply_count": 1,
+      "text": "在调提示词，用 Jev-like模型来做判断。\n\n先采集了一些，我让gemini帮我粗标一下，然后我搞个评测集先。 https://t.co/ZBz5zopijX"
+    },
+    {
+      "created_at": "Thu Nov 19 08:39:13 +0000 2026",
+      "id": "2123335271387369760",
+      "reply_count": 1,
+      "text": "现在很不准。"
+    },
+    {
+      "created_at": "Thu Nov 19 02:52:37 +0000 2026",
+      "id": "2123248048868643203",
+      "reply_count": 15,
+      "text": "Neon 的Model Card 发生一些变化，之前版本是\n\nGemini 4 Neon builds on Gemini 4 Hydrogen with deeper reasoning.\n\n现在是：\n\nGemini 4 Neon is adapted from Gemini 4 Carbon.\n\n我不认为这么重要的信息会笔误，所以这两个估计都是事实，只是为了避免被视为Flash模型。"
+    },
+    {
+      "created_at": "Thu Nov 19 00:10:41 +0000 2026",
+      "id": "2123207296125894992",
+      "reply_count": 27,
+      "text": "不是我Argon呢？连对比都不放了吗。\n\n另外这四个模型的价格差别感觉不大。 https://t.co/wr7lTEWL4s"
+    },
+    {
+      "created_at": "Wed Nov 18 08:42:08 +0000 2026",
+      "id": "2122973621413179461",
+      "reply_count": 2,
+      "text": "AI 号只会库库生成文案。\n\n但是heretic 默认的数据集是英文的，去审查会导致中文输出异常（比如复读机、死循环），需要准备中文数据集。\n\nheretic 很强大，不仅仅能去审查，还可以修改情感表达，去slop。但是得精心打造数据集才行。"
+    },
+    {
+      "created_at": "Wed Nov 18 05:23:47 +0000 2026",
+      "id": "2122923701939413313",
+      "reply_count": 17,
+      "text": "Carbon medium 写的真好，只需要抑制高大上的名词就行了，不像 gpt要抑制的slop特别多。（语言能力梦回 Opus 4.6）\n\n而且正文能看懂啊，GPT写的东西我现在都阅读困难。 https://t.co/bsB9dIdMDF"
+    },
+    {
+      "created_at": "Wed Nov 18 05:31:54 +0000 2026",
+      "id": "2122925747283399046",
+      "reply_count": 0,
+      "text": "ai写出的东西判断是个问题。我昨天把这个库整体自己研究了下，发现carbon真的抓住了重点而且说的是对的。"
+    },
+    {
+      "created_at": "Tue Nov 17 17:57:09 +0000 2026",
+      "id": "2122750906487984605",
+      "reply_count": 2,
+      "text": "我将十分荣幸地响应这些呼声，重返首席执行官的岗位。\n\n王者归来吧～"
+    },
+    {
+      "created_at": "Tue Nov 17 16:37:19 +0000 2026",
+      "id": "2122730814039556554",
+      "reply_count": 19,
+      "text": "正在大量使用 gemini-decision-1 模型来做分类和评分，很省钱。\n\n猛猛的消耗 ultra 送的钱，但是几千个请求打过去才 0.1 刀。"
+    },
+    {
+      "created_at": "Tue Nov 17 15:21:47 +0000 2026",
+      "id": "2122711808566067503",
+      "reply_count": 1,
+      "text": "Harness RL 适配 pi 的 lora adapter for Qwen3.8-27B。\n\n未来本地模型可能都是个人按需强化过的。\n\n我最近在 27B 上做了一些别的（反审查、色情输出，情感陪伴之类的）试验，效果挺好。"
+    },
+    {
+      "created_at": "Tue Nov 17 14:39:11 +0000 2026",
+      "id": "2122701087849451764",
+      "reply_count": 18,
+      "text": "carbon 真好，我觉得绝对有 Opus5.5 的水平。\n\n但是 Google 你好好风控该风控的地方吧，天天盯着小规模反代干啥，现在还有被人批量开免费 Ultra 试用的漏洞（这里不传播），未来只会更劣化。"
+    },
+    {
+      "created_at": "Tue Nov 17 14:41:07 +0000 2026",
+      "id": "2122701571809255521",
+      "reply_count": 0,
+      "text": "尼玛竟然开 12 个月的，真是丧心病狂"
+    },
+    {
+      "created_at": "Tue Nov 17 08:00:38 +0000 2026",
+      "id": "2122600789420232907",
+      "reply_count": 25,
+      "text": "本体论应用到 Data Agent（国内一般叫智能问数、数据智能体）的项目推荐：\n\nEvoOntology 是唯一做了Bench、消融对比，而且实现 Ontology 进化（就是用 Agent读 Trace，迭代 Ontology 结构），毕竟要发论文，实验很重要。\n\n本体落地 Data Agent 落地的办法：1. 建设评估集 2. 自动构建本体结构 3. 人工 https://t.co/gwS3yjr17K"
+    },
+    {
+      "created_at": "Tue Nov 17 08:01:06 +0000 2026",
+      "id": "2122600905090768941",
+      "reply_count": 1,
+      "text": "1. **[microsoft/Ontology-Playground](Ontology-Playground/)** —— 微软面向 **Microsoft Fabric IQ** 打造的纯静态可视化本体探索、设计与教学试验场\n\n2. **[fuyuxiang/ontology](ontology/)（元枢本体 · Yuanshu Ontology）** —— 对标 Palantir Foundry/AIP 理念的**企业级可运行本体（Operational"
+    },
+    {
+      "created_at": "Tue Nov 17 05:23:43 +0000 2026",
+      "id": "2122561298210988183",
+      "reply_count": 20,
+      "text": "研究了一段时间本体论，实际上在做业务智能体的时候，本体论你只需要懂一点点就行了，别的都是概念。\n\n我理解核心就是对业务建模，从而让 Agent 能够理解业务术语和逻辑，理解后，不管是生成 SQL、RAG问答还是执行业务规则都在业务逻辑内。\n\n学习可以从 https://t.co/ihbVq7ZVao 开始。"
+    },
+    {
+      "created_at": "Tue Nov 17 02:14:31 +0000 2026",
+      "id": "2122513683121377473",
+      "reply_count": 60,
+      "text": "Gemini 使用路线：\n\n模型好好 - AGY 垃圾 - 研究反代 - 被封号\n\n昨日购入 Ultra ，今天已经到第三步了。\n\n我的 Plan 是开小号进家庭组，用 magpie agy acp 来搞。兄弟们等我消息。"
+    },
+    {
+      "created_at": "Tue Nov 17 03:06:09 +0000 2026",
+      "id": "2122526677205184874",
+      "reply_count": 5,
+      "text": "我说agy的工具调用咋那么这么慢 https://t.co/ivYn1oe7rE"
+    },
+    {
+      "created_at": "Mon Nov 16 10:38:34 +0000 2026",
+      "id": "2122278144698970512",
+      "reply_count": 1,
+      "text": "Slop is when we put less effort into producing something than we ask the consumer to spend understanding it.\n\n这个对 AI Slop 的定义很精准，最稀缺的就是注意力。\n\n可以签名反 AI Slop ，哈哈哈\n\nhttps://t.co/mTHjcRaEsr"
+    },
+    {
+      "created_at": "Mon Nov 16 09:37:27 +0000 2026",
+      "id": "2122262762990825592",
+      "reply_count": 5,
+      "text": "现在模型、Harness benchmark 很多，而且也容易有争议。\n\n其实我们不要看谁在前面，要看谁在后面。\n\n就和美食探店博主一样，全好评的不一定好吃，有差评的肯定不好吃。"
+    },
+    {
+      "created_at": "Mon Nov 16 08:48:19 +0000 2026",
+      "id": "2122250399172505690",
+      "reply_count": 4,
+      "text": "苹果的软件质量真的差的很。\n\n创建了一个儿童账户在家长设备上死活无法控制他的屏幕使用时间。\n\n经过搜索，发现竟然是持续好几年的 Bug，儿童账户不能用手机号注册，而是需要用邮箱注册。\n\n而苹果在国内注册儿童账户默认就推荐用手机号注册。\n\n我能理解 Bug，但是无法理解一个 Bug"
+    },
+    {
+      "created_at": "Mon Nov 16 07:41:31 +0000 2026",
+      "id": "2122233589354164572",
+      "reply_count": 5,
+      "text": "agy swarm模式里换子智能体模型的办法原来如此朴实无华，就是你告诉他用啥。否则就用Gemini  Flash那个哈基米模型。"
+    },
+    {
+      "created_at": "Mon Nov 16 06:43:47 +0000 2026",
+      "id": "2122219061832716644",
+      "reply_count": 26,
+      "text": "购入了 Ultra 5x 会员，给 agy 一个机会，使用 swarm + Orchestrator (Argon) 模式。\n\n先水个专利完成每月的专利任务。 https://t.co/UXrSRDVCLa"
+    },
+    {
+      "created_at": "Mon Nov 16 06:50:46 +0000 2026",
+      "id": "2122220818940010832",
+      "reply_count": 3,
+      "text": "感觉库库干活的是 gemini-flash-worker-agy。这个子Agent的模型没找到地方改啊。"
+    },
+    {
+      "created_at": "Mon Nov 16 04:32:40 +0000 2026",
+      "id": "2122186064656015777",
+      "reply_count": 15,
+      "text": "左上角是帕累托最优，右下角我将其命名为帕累托最差。\n\n但是 CC 至少在自家模型上表现还可以，Agy 用自家模型效果也很差。 https://t.co/MR1MQTu8SH"
+    },
+    {
+      "created_at": "Sun Nov 15 10:47:23 +0000 2026",
+      "id": "2121917977591476651",
+      "reply_count": 0,
+      "text": "AI Engineer 11.12-13 两天的主题，可以挑选感兴趣听听。\n\n都是来自 Anthropic、Google等公司的分享，主题基本围绕着 AI Coding Agent。\n\n比如 Philipp Schmid 的 I deleted 90% of my harness (And It Got Better)\n\nhttps://t.co/swjEM3iOhb"
+    },
+    {
+      "created_at": "Sun Nov 15 08:37:00 +0000 2026",
+      "id": "2121885163261182437",
+      "reply_count": 17,
+      "text": "一个多月没来，发现 AI 自动回复变多了，而且很容易看出来，还都是蓝标。是为了奖励么？\n\n只能见一个屏蔽一个"
+    },
+    {
+      "created_at": "Sun Nov 15 06:49:26 +0000 2026",
+      "id": "2121858093911052561",
+      "reply_count": 11,
+      "text": "说到单测这个话题，我现在比较正式的大功能需求的顺序是这样的：\n\n需求 -&gt; 快速原型 -&gt; 设计（输出HTML可视化） -&gt; Agent 实现（无注释无单测，只跑单测回归不破坏之前功能）-&gt; 集成测试+用户测试 -&gt; 代码整理（清理、简化、加注释、补单测）-&gt; 二次复测+人工检查 -&gt; 发 PR\n\n小项目就一把梭，无所谓。"
+    },
+    {
+      "created_at": "Sun Nov 15 06:52:59 +0000 2026",
+      "id": "2121858988505768043",
+      "reply_count": 2,
+      "text": "人的任务：\n1. 检查原型效果，下命令修改\n2. 确定大的设计逻辑正确（正式项目还是不太放心，信任Agent的话可以去掉）\n3. 最后检查二次复测的结果，可以让Agent直接生出证据截图，直接检查截图。（但是我个人还是相信自己点一下自己做的功能）"
+    },
+    {
+      "created_at": "Sun Nov 15 06:20:48 +0000 2026",
+      "id": "2121850886498697698",
+      "reply_count": 19,
+      "text": "让 Agent 写代码的时候我都是强制要求不要写注释，不要写单测。\n\n为了满足某些规范，可以等集成测试通过后，再单独补上注释+单测。"
+    },
+    {
+      "created_at": "Sat Nov 14 15:47:49 +0000 2026",
+      "id": "2121631193951293883",
+      "reply_count": 54,
+      "text": "Claude 这个 Building Always on Agents，实际是 Personal Agent的最基本的设计模式。\n\n之前在 raft build 上就看到类似的设计。\n\nhttps://t.co/PqOchd7s2Q https://t.co/QVmYjIVre1"
+    }
+  ],
+  "shao__meng": [
+    {
+      "created_at": "Tue Oct 20 04:14:33 +0000 2026",
+      "id": "2112397032912719957",
+      "reply_count": 17,
+      "text": "我把给孩子做的键盘打字游戏开源了\n\nKeyboard Island · 键盘小岛\nhttps://t.co/uM955Y3fvz\n\n前面发布到 ChatGPT Sites，收到一些留言说访问不了，还有一些朋友想知道是怎么实现的。 https://t.co/KA3DXyPoNO"
+    },
+    {
+      "created_at": "Thu Nov 19 07:01:25 +0000 2026",
+      "id": "2123310660465705364",
+      "reply_count": 4,
+      "text": "刚看完腾讯财报后电话会议中，马化腾和刘炽平关于 WorkBuddy 的一些观点和数据分享，有几个发现，一起看看\n\n1. 按用户每日大语言模型 Token 消耗总量衡量，WorkBuddy 已发展成为国内规模最大的 AI 应用。同时，日活超过 1000 万，日均 Token 消耗量超 100 万亿。\n\n-- 这个最大，是包括了豆包这种 AI https://t.co/oNNDrukaNa"
+    },
+    {
+      "created_at": "Thu Nov 19 05:33:46 +0000 2026",
+      "id": "2123288603434574160",
+      "reply_count": 1,
+      "text": "已经有太多 Coding Agent 了\n\n如果 Claude Code 不封号，甚至不太需要其他 Coding Agent ...\n\n即使现在这么多 Personal Agents，还是更集中在个人提效的方向，对个人健康关注的不多。\n\n如果 Agent + Mirobody"
+    },
+    {
+      "created_at": "Thu Nov 19 04:54:05 +0000 2026",
+      "id": "2123278617497186713",
+      "reply_count": 14,
+      "text": "CMU 17-214 第 21 讲：Agent 一下午改 2000 行，就把检查做成流水线门禁\n\nCMU 17-214「Agentic Software Development」课程认为，有了 Coding Agent 之后，写出看起来像样的代码已经不贵了，难的是理解、验证、演化，以及把一套软件真正跑起来。整个学期都围着同一个系统做设计和改版，并一直监督 https://t.co/lbReQdX9mr"
+    },
+    {
+      "created_at": "Thu Nov 19 02:45:41 +0000 2026",
+      "id": "2123246304554041737",
+      "reply_count": 6,
+      "text": "Netlify 十年最大改版：让 Agent 搭建和开发者改代码走同一套工作流\n\n@Netlify 创始人兼 CEO @biilmann 宣布，公司推出新品牌、新网站，以及从头重新做的应用体验。他称之为十年来对品牌和用户体验最大的一次改动，也是近两年前开始的公司转型的最后一步。Netlify https://t.co/VoXNCIXlN5"
+    },
+    {
+      "created_at": "Thu Nov 19 02:22:55 +0000 2026",
+      "id": "2123240573171892225",
+      "reply_count": 5,
+      "text": "Lauren 谈 Grok Bot 自动化：先分清目标与过程，再把判断和反馈教给 Bot\n\n@poteto 认为很多人还没用上 Grok Bot 的完整能力，难点往往不是工具本身，是不太会把一件事拆成可以自动化的目标和过程。所以她写了这篇文章来讲解如何做 Grok Bot 自动化。\n\n先分清目标和过程 https://t.co/EsabEVzUxW"
+    },
+    {
+      "created_at": "Thu Nov 19 01:49:52 +0000 2026",
+      "id": "2123232255309119893",
+      "reply_count": 4,
+      "text": "Shopify：移动应用出码提速 11 倍后，用攻击面地图把安全审查拆到单条深链\n\n来自 @ShopifyEng 工程团队博客，在 Agent 时代，他们移动应用的代码吞吐已经是去年同期的 11 倍。12 周重写 Shopify 应用期间，平均每周改动约 43.4 万行，去年同期大约是 3.9 https://t.co/j5ROxBQzny"
+    },
+    {
+      "created_at": "Thu Nov 19 01:45:28 +0000 2026",
+      "id": "2123231149648732618",
+      "reply_count": 10,
+      "text": "腾讯总裁刘炽平表示，元宝此前没有达到预期的成功，所以目前已大幅缩减开支！\n\n所以元宝是边「大福缩减开支」，边继续在公众号投广告，而且广告一往既往的莫名其妙 😅 https://t.co/libEyixJcR"
+    },
+    {
+      "created_at": "Thu Nov 19 01:33:00 +0000 2026",
+      "id": "2123228012439322668",
+      "reply_count": 9,
+      "text": "最近半年 OpenAI 内部到底发生了什么，越来越看不懂了\n\n让我想到这一点的触发是：如果 A\\ 上市，OpenAI 会阻击它吗？如果要阻击做好的办法不是发布一个比 Fable 5.2 和 Opus 5.5 更强的模型吗？\n\n但 GPT-6.2 却更早发布了、也确实没办法打败 Fable 5.2 和 Opus 5.5 ... 好像 OpenAI"
+    },
+    {
+      "created_at": "Thu Nov 19 01:03:55 +0000 2026",
+      "id": "2123220694444163503",
+      "reply_count": 5,
+      "text": "https://t.co/MiQQWSSqeo"
+    },
+    {
+      "created_at": "Thu Nov 19 00:14:49 +0000 2026",
+      "id": "2123208337965883873",
+      "reply_count": 6,
+      "text": "Google 开源 ABFS：Android 源码检出从约 36 分钟降到 8 秒内\n\nAndroid 17 开源版本有 1084 个 Git 仓库、约 162 万个文件，代码 161 GB，构建产物 155 GB，完整工作区大约 300 GB。再加上硬件厂商代码和自有应用，规模还要再放大两到三倍。传统流程里，拉一份 AOSP 往往超过 30 https://t.co/Bo0zCORAEO"
+    },
+    {
+      "created_at": "Wed Nov 18 11:50:01 +0000 2026",
+      "id": "2123020900962598998",
+      "reply_count": 2,
+      "text": "湿厕纸，往脸上比划啥 🤣 https://t.co/cHt6Vimopk"
+    },
+    {
+      "created_at": "Wed Nov 18 10:08:00 +0000 2026",
+      "id": "2122995228689010872",
+      "reply_count": 13,
+      "text": "LangChain 谈主动式 Agent：超七成运行靠日程，关键是记忆与人的注意力\n\n@LangChain 团队 @sydneyrunkle 总结了团队构建主动式 Agent 的经验：当 Agent 开始在后台推进持续数天、数周的目标，瓶颈不再只是模型能不能完成任务，而转为人有没有时间处理它不断送来的问题和结果。\n\n以内部的销售 Agent https://t.co/yaCFhRN5D9"
+    },
+    {
+      "created_at": "Wed Nov 18 09:56:14 +0000 2026",
+      "id": "2122992266637955157",
+      "reply_count": 3,
+      "text": "Cognition 推出 Devin Bots：从接单写代码，到带领多个 Agent 持续负责一项工程目标\n\nDevin Bots 想解决的不只是「Agent 能不能完成这次任务」，是任务结束之后，谁来发现下一件事、检查效果，并继续推进。\n\n与一次请求对应一次执行的 Devin 会话不同，Bot https://t.co/WosdgtSSri"
+    },
+    {
+      "created_at": "Wed Nov 18 09:19:30 +0000 2026",
+      "id": "2122983021129425047",
+      "reply_count": 4,
+      "text": "Chrome 官方案例：Policybazaar 用 Agent 将复杂前端开发验证从 4 天缩至数小时，性能审计工作量减少 92%\n\nCoding Agent 能写前端代码，不代表它知道页面实际渲染得怎么样。Chrome 官方介绍的 Policybazaar 案例，补上的正是这一步：用 Modern Web Guidance 约束代码写法，再用 Chrome DevTools for https://t.co/uyKOTzVdMN"
+    },
+    {
+      "created_at": "Wed Nov 18 07:53:37 +0000 2026",
+      "id": "2122961408262635560",
+      "reply_count": 4,
+      "text": "Meta AI 提出自我改进记忆：先优化记忆提示，再把技能训进模型\n\nMeta AI RAM 团队提出 Self-Improving Memory，想让语言模型在持续任务中越做越好。关键不是把全部历史塞进上下文，而是学会怎么写记忆、怎么组织，以及何时再读回来。他们用同一套模型 Kimi-K2.6，既当任务 agent，也当改提示的元 https://t.co/ich8f0I1na"
+    },
+    {
+      "created_at": "Wed Nov 18 07:44:53 +0000 2026",
+      "id": "2122959211487515033",
+      "reply_count": 4,
+      "text": "OpenAI 给 GPT-6.2 的 Codex 提示建议：先说验收标准，再按任务选推理强度\n\nOpenAI 在这份指南里写，GPT-6.2 Astra 比 GPT-6 Astra 更容易给出接近可用的初稿：代码更好读，写作更直接，视觉作品也更完整。这些提示方法适用于整个 GPT-6.2 系列，包括 Astra 和 Sol，重点是在 Codex https://t.co/FsiRQdQdKY"
+    },
+    {
+      "created_at": "Wed Nov 18 07:38:34 +0000 2026",
+      "id": "2122957621263302910",
+      "reply_count": 3,
+      "text": "Airbnb 用 Presidio 做文本去标识：把真实信息换成可训练的假数据\n\n训练模型前，Airbnb 会先处理消息、评价和客服对话里的个人信息：按公司统一分类，把姓名、住址、支付信息等替换成尽量逼真的模拟数据，既减少真实信息的副本和泄露，也尽量保留训练价值。政策由 Privacy Architecture https://t.co/kUq5OGa2oP"
+    },
+    {
+      "created_at": "Wed Nov 18 03:24:44 +0000 2026",
+      "id": "2122893742801604691",
+      "reply_count": 10,
+      "text": "Parallel 开源搜索评测框架：模型接入搜索后，到底强了多少？\n\n给模型接上搜索，不等于它就能把研究任务做好。还需要判断何时搜索、如何提问、哪些网页值得继续读取，以及证据是否够支撑答案。 @p0 开源 https://t.co/MlGn5YkEgK"
+    },
+    {
+      "created_at": "Wed Nov 18 02:47:43 +0000 2026",
+      "id": "2122884426023514180",
+      "reply_count": 1,
+      "text": "黄仁勋发文愿重返 NVIDIA，但回归尚未获董事会支持\n\n承认个人生活中的严重错误，表示将配合独立调查，并提出：如果董事会认为符合股东、员工、公司和美国的利益，他愿重返 CEO。"
+    },
+    {
+      "created_at": "Wed Nov 18 02:19:24 +0000 2026",
+      "id": "2122877302979842540",
+      "reply_count": 14,
+      "text": "Tobi Lütke 在 Vercel Ship 谈「第三类顾客」：Agent 代购是增量，工程变成核验\n\nShopify CEO Tobi Lütke 与 Vercel CEO Guillermo Rauch，在旧金山 Vercel Ship SF 做了这场约半小时的炉边对谈「The Third Customer」：\nhttps://t.co/bLoH4fmFwY\n\nAgent 购物是增量，不是把店面全部替换掉 https://t.co/xr8SQjwUSC"
+    },
+    {
+      "created_at": "Wed Nov 18 02:05:41 +0000 2026",
+      "id": "2122873850744783179",
+      "reply_count": 8,
+      "text": "OpenAI 终于发布 GPT-6.2：Astra 挑战专业难题，Sol 降低日常任务成本，这两个模型能让 OpenAI 重新站起来吗？这段时间被 Fable 5.2 和 Opus 5.5 要打趴下了。。。\n\nOpenAI 今天同时推出 GPT-6.2 Astra 和 Sol：前者面向高难度专业项目，后者面向日常工作与多步 Agent https://t.co/YHfh7RDiD7"
+    },
+    {
+      "created_at": "Wed Nov 18 00:27:33 +0000 2026",
+      "id": "2122849152648528045",
+      "reply_count": 14,
+      "text": "[AI Engineer Code Summit 2026 分享] \n那个逆向了 PhotoShop 和 Office 的 @get_artcraft 团队：24 小时复刻出 Photoshop，但还不是完整替代\n\nArtCraft 团队 Brandon Thomas 在旧金山 AI Engineer CODE Summit 2026 @aiDotEngineer 做了这场演讲「Let's Open Source the World」： https://t.co/ncyZ8Cpha8"
+    },
+    {
+      "created_at": "Tue Nov 17 11:45:06 +0000 2026",
+      "id": "2122657277878714763",
+      "reply_count": 9,
+      "text": "已回家！今天一整天的感触还挺深的。\n\n首先路程是真远，25 个地铁站 + 11 个公交站 + 1 公里多走路，单程接近 2 小时。如果是每天通勤，要废！\n\n跑题了，说回重点，我现在脑子还有点乱，被冲击的点挺多：从办公环境、招人困境、团队 AI 认知、外部合作团队（营销方向）对 AI"
+    },
+    {
+      "created_at": "Tue Nov 17 03:22:19 +0000 2026",
+      "id": "2122530748213411950",
+      "reply_count": 9,
+      "text": "Simon Willison 介绍外部沙箱：Agent 留在 Mac 上，命令进入隔离环境\n\nSimon Willison 在「External sandboxes for coding agents」中分享：让 Claude Code、Codex 或 Pi 继续在本机上运行，但它们要执行的代码进入由 WebAssembly、QEMU 或 Apple Container 搭建的隔离 Linux 环境。 https://t.co/yEAt9kfrNK"
+    },
+    {
+      "created_at": "Tue Nov 17 01:50:17 +0000 2026",
+      "id": "2122507586541166850",
+      "reply_count": 12,
+      "text": "微软研究院开源 TokenEconomizer：不改模型，从仓库经验里给 Coding Agent 省 token\n\n@MSFTResearch 研究并开源了一套外部控制器「TokenEconomizer」：不改 Coding Agent 和底层模型，从同一仓库的历史会话里学习，减少重复摸索和无效调用。\n\n博客地址：https://t.co/yCLALzU3io https://t.co/efd9kKkXHD"
+    },
+    {
+      "created_at": "Tue Nov 17 00:50:17 +0000 2026",
+      "id": "2122492485872308640",
+      "reply_count": 30,
+      "text": "Reddit 有一个热门讨论：已经有 Claude Code/Codex 了，企业为什么还要招聘 Harness Engineer、自建 Agent Harness？难道是在重复造轮子？\n\nhttps://t.co/iOkO3AhQLt\n\n# Harness 是让模型持续工作的配套系统\n\n讨论中一个比较清晰的解释是：模型负责推理和生成，harness 则负责把模型接进实际工作。 https://t.co/UgvaI0wuJX"
+    },
+    {
+      "created_at": "Tue Nov 17 00:38:04 +0000 2026",
+      "id": "2122489411086803199",
+      "reply_count": 4,
+      "text": "Jane Street 软件工程师面试变了（一点点...）：增加设计、验码与 AI Coding，不过传统考核仍是主流\n\nJane Street 工程师 Matthew Saffer 在《Our software engineering interviews are changing (a little)》中介绍了公司的面试试点。 https://t.co/7LiZSYkTxG"
+    },
+    {
+      "created_at": "Tue Nov 17 00:26:00 +0000 2026",
+      "id": "2122486376981795286",
+      "reply_count": 4,
+      "text": "Together 团队分享 Agent 评测实践：失败的不只是模型，还有文档和 Skills\n\n@togethercompute 团队 @nutlope 分享了团队里的实际做法：用 Coding Agent 测试自家 SDK、命令行和文档，再根据失败记录改产品。\n\nhttps://t.co/mul70Sa6oT\n\n# 评测的对象，是 Agent 使用产品的全过程 https://t.co/Nv7rXScEXa"
+    },
+    {
+      "created_at": "Tue Nov 17 00:04:22 +0000 2026",
+      "id": "2122480930439016820",
+      "reply_count": 18,
+      "text": "Claude Code 团队：让 Agent 交付验证证据，不只是代码\n\n来自 Claude Code 团队 @addyosmani 分享：Claude Code 团队 90% 的代码由 Claude 编写并审查。真正限制并行规模的，不再是代码生成速度，转为人能否确认结果可靠。验证循环的意义，是让 Agent 提交可检查的证据，减少人逐项核对的负担。 https://t.co/yXjnTv9Fq3"
+    }
+  ],
+  "op7418": [
+    {
+      "created_at": "Thu Nov 12 01:43:55 +0000 2026",
+      "id": "2120694045299327187",
+      "reply_count": 276,
+      "text": "我去！Fable 5.2 只用了一下午、45 亿 token 就给我做出了这样一个 3D 动作游戏！\n\n包括模型、场景设计、动作设计、优化都是它搞的，这一切都被融合在了一个 30 兆的 HTML 文件里边。\n\n总共就花了一下午，它这个游戏制作能力太恐怖了\n\n可以在这里试试：https://t.co/4hcx7tYxWy https://t.co/nuqhSqIoY7"
+    },
+    {
+      "created_at": "Thu Nov 19 07:18:56 +0000 2026",
+      "id": "2123315070071619891",
+      "reply_count": 29,
+      "text": "我去，谷歌明天还要发新的模型，这 tm 母猪下崽呢"
+    },
+    {
+      "created_at": "Thu Nov 19 04:17:52 +0000 2026",
+      "id": "2123269503736070603",
+      "reply_count": 70,
+      "text": "谷歌新发布的 Gemini 4 Neon 相当牛逼\n\n我感觉在我的任务上真的可以平替 Opus 5.5 了！\n\n尤其是它的多模态能力，以及对设计和动效的还原能力相当厉害。\n\n这个视频就是他刚才给我做的几个组件，基于参考图再发散的\n\n因为它的多模态是真正的多模态，在动态内容的还原上比 Opus 5.5、比 Claude 要好很多。 https://t.co/7yYjdM9nrz"
+    },
+    {
+      "created_at": "Thu Nov 19 03:51:37 +0000 2026",
+      "id": "2123262897858170911",
+      "reply_count": 34,
+      "text": "哇，真的太搞了！没想到谷歌真的在 Android Studio 里实装了这个元素周期表模型选择器\n\n他们这个命名真是服了。\n\n估计有很多英语国家的人也并不太清楚每个元素到底是怎么读，也不知道这个单词对应的元素是哪个。\n\n我现在真的很迷茫，因为它很不明显，你不知道哪个元素是大、哪个元素是小。\n\n它不像 https://t.co/WkuBQleoIt"
+    },
+    {
+      "created_at": "Thu Nov 19 04:35:01 +0000 2026",
+      "id": "2123273817992954307",
+      "reply_count": 1,
+      "text": "语音输入法又打错字了，应该是 AI Studio 哈"
+    },
+    {
+      "created_at": "Wed Nov 18 16:08:44 +0000 2026",
+      "id": "2123086011056152749",
+      "reply_count": 13,
+      "text": "准点上线玩给他爱六（GTA6） https://t.co/gKeniN9wwg"
+    },
+    {
+      "created_at": "Wed Nov 18 15:11:43 +0000 2026",
+      "id": "2123071662199583137",
+      "reply_count": 31,
+      "text": "GPT 6.2 Astra 在复杂场景上的建模效果确实牛逼，细节也挺好。\n\n感觉这个是在我 MacBook Air 上渲染的，要是换成我 Windows 的英伟达显卡，效果和细节应该会更好一点 https://t.co/4AOo70kmul"
+    },
+    {
+      "created_at": "Wed Nov 18 15:15:29 +0000 2026",
+      "id": "2123072609382432959",
+      "reply_count": 6,
+      "text": "这是它从零在 Blender 里面建模的，没有用3D 模型生成的模型和其他素材。\n\n我几乎没有干涉。"
+    },
+    {
+      "created_at": "Wed Nov 18 08:57:22 +0000 2026",
+      "id": "2122977451500523892",
+      "reply_count": 99,
+      "text": "腾讯财报说，workbuddy 日活用户超过了 1000 万，太猛了！ https://t.co/JtlnitdfTT"
+    },
+    {
+      "created_at": "Wed Nov 18 05:30:03 +0000 2026",
+      "id": "2122925281514303836",
+      "reply_count": 59,
+      "text": "试了一下 GPT-6.2 Sol 新上的 Ultra Fast 模式\n\n让它剪了一个 8 分钟的视频\n\n总共耗时 27 分钟，实际模型响应用了 14 分钟左右。\n\n平均速度是 126 token/s，最快的一次达到了 252 token/s https://t.co/dwhTPFtALT"
+    },
+    {
+      "created_at": "Wed Nov 18 05:38:36 +0000 2026",
+      "id": "2122927432642781595",
+      "reply_count": 11,
+      "text": "这个时候就能看出来 Deepseek 啥都不干每秒 300 多 Token 的速度有多快了"
+    },
+    {
+      "created_at": "Wed Nov 18 04:53:40 +0000 2026",
+      "id": "2122916123012485367",
+      "reply_count": 50,
+      "text": "关于 GPT 6.2 Astra 发布以后大 V 都在喷的情况，我感觉可能跟他们跟 KOL 的沟通上也存在一些问题。\n\n应该就是提前测试又不给钱，还想让大家出内容，然后模型又不行，就都开始喷了。\n\n不然的话，如果模型其实没有那么不堪吧，大家都顶多不说话，或者说话委婉一些。"
+    },
+    {
+      "created_at": "Wed Nov 18 04:04:25 +0000 2026",
+      "id": "2122903729578070252",
+      "reply_count": 55,
+      "text": "GPT-6.2 Astra 虽然大家的反馈都不太好\n\n但我感觉 Sol 是真的快，快了太多了！\n\n开了 Fast 以后，任务完成得相当迅速。所以我觉得 6.2 Sol 还是挺不错的。\n\n我现在试试这个 6.2 Sol Ultra Fast 有多快，让他剪个视频试试 https://t.co/vtJ9NjgseC"
+    },
+    {
+      "created_at": "Wed Nov 18 04:06:34 +0000 2026",
+      "id": "2122904271729705056",
+      "reply_count": 3,
+      "text": "其实大家没指望它有多牛逼，它就是把以前的问题修了，然后变得快点就可以了。\n\n后面应该会多用 6.2 Sol，Astra 就不搞了"
+    },
+    {
+      "created_at": "Wed Nov 18 03:33:55 +0000 2026",
+      "id": "2122896053020291268",
+      "reply_count": 8,
+      "text": "antigravity 重置了"
+    },
+    {
+      "created_at": "Wed Nov 18 01:05:25 +0000 2026",
+      "id": "2122858681561968931",
+      "reply_count": 82,
+      "text": "起来看了一下大家关于 GPT 6.2 astra 的一些评论，看起来这模型不太行啊\n\n大家觉得很像当时的 Opus 4.7 或者 4.8，就是它不说人话，没办法协作，同时编程能力还有所下降\n\n好像是在 3D 领域过度训练了一样，不过做 3D 确实厉害，看起来建模细节和精细度都比那个 Claude 要好"
+    },
+    {
+      "created_at": "Tue Nov 17 16:53:15 +0000 2026",
+      "id": "2122734826931556701",
+      "reply_count": 20,
+      "text": "老黄发话了！看这意思是回去当 CEO 有戏啊？"
+    },
+    {
+      "created_at": "Tue Nov 17 15:36:34 +0000 2026",
+      "id": "2122715527873429517",
+      "reply_count": 40,
+      "text": "太猛了 muse 的日活居然突破了 1000 万！\n\nGorkbot 最近实在是拉，我又开始频繁地使用 muse 了"
+    },
+    {
+      "created_at": "Tue Nov 17 01:18:49 +0000 2026",
+      "id": "2122499668647227665",
+      "reply_count": 166,
+      "text": "Codex 和 GPT 6 Astra 现在真是拉完了\n\n都是同样的模型，你很难想象 OpenAI 是怎么搞到这么拉的\n\n他们已经两个月没有发布旗舰模型了，一直说的 6.2 也遥遥无期\n\n很多人说 OpenAI 现在正经历它自己的 Gemini 3.5 Pro 时刻"
+    },
+    {
+      "created_at": "Tue Nov 17 00:56:33 +0000 2026",
+      "id": "2122494061768798490",
+      "reply_count": 47,
+      "text": "iOS 27.3 居然给 iPhone Duo 上了面部解锁\n\n估计是很多人反馈那个 Touch ID 实在是难用，临时加上了一个 2D 解锁，跟安卓一样\n\n感觉这事儿就办得很不苹果，而且在展开内屏的情况下，没有办法用面部，还得用 Touch ID，这手机上就全是补丁"
+    },
+    {
+      "created_at": "Mon Nov 16 07:47:08 +0000 2026",
+      "id": "2122235004055126511",
+      "reply_count": 19,
+      "text": "也欢迎通过新上线的 Next Token Skill 去发布我们播客的切片。\n\n之前有些朋友发，其实效果挺不错的，数据都挺好：https://t.co/B9PO3VX0Le\n\nSkill 里的数据自带时间轴，所以你如果跟他讨论完，觉得哪一部分合适的话\n\n可以直接让 Agent 帮你导出对应的视频来，然后去别的媒体平台分发"
+    },
+    {
+      "created_at": "Mon Nov 16 07:46:13 +0000 2026",
+      "id": "2122234773162938545",
+      "reply_count": 86,
+      "text": "第十期 Next Token，我们关于 Personal Agent 这部分讲得太好了！\n\n用 Gemini 4 总结了几条，放在图片里面了\n\n我们就是上一代移动互联网做太好了，导致 Personal Agent 完全没办法做，围墙太高了\n\n其实我们是有 YouTube 的，这里看的话体验更好一些：https://t.co/CN1RK0cex9 https://t.co/7NRr8zaAA3"
+    },
+    {
+      "created_at": "Sun Nov 15 00:33:31 +0000 2026",
+      "id": "2121763489668878800",
+      "reply_count": 49,
+      "text": "牛逼啊，BLG，买了雷鸟眼镜准备退货的哥们麻了 https://t.co/OpCFHUCItn"
+    },
+    {
+      "created_at": "Sun Nov 15 00:34:49 +0000 2026",
+      "id": "2121763817629876440",
+      "reply_count": 9,
+      "text": "B 站还会免费送大会员，有空可以领一下 https://t.co/aKksOAkQx7"
+    },
+    {
+      "created_at": "Sun Nov 15 00:04:31 +0000 2026",
+      "id": "2121756191495954772",
+      "reply_count": 52,
+      "text": "🐂🍺 SpaceX 第一次用机械臂夹住回收了二级飞船 https://t.co/lRijwQCyRx"
+    },
+    {
+      "created_at": "Sat Nov 14 12:51:44 +0000 2026",
+      "id": "2121586881347588530",
+      "reply_count": 35,
+      "text": "C 大推荐的一个新的 agent 产品，挺开放的，功能也比较全面"
+    },
+    {
+      "created_at": "Sat Nov 14 06:11:10 +0000 2026",
+      "id": "2121486075084607868",
+      "reply_count": 9,
+      "text": "大聪明用 AI 做的游戏，挺有意思的"
+    },
+    {
+      "created_at": "Sat Nov 14 06:01:00 +0000 2026",
+      "id": "2121483517662306392",
+      "reply_count": 71,
+      "text": "Gemini 4 Carbon 写作确实牛逼\n\n让它总结了 Next Token 过去 9 期 30 条 AI 领域的核心认知：\n\n1. Token 就是新货币；买一台本地机器跑模型，本质上是在家里铸币。—— 橘子\n\n2. AI 没有泡沫，只有受制于物理基建的供给不足。—— 歸藏\n\n3. 在 AI 时代，别羞于承认自己是卖 Token 的——你不卖"
+    },
+    {
+      "created_at": "Sat Nov 14 06:02:13 +0000 2026",
+      "id": "2121483824777593211",
+      "reply_count": 6,
+      "text": "顺便我们把 Next Token 的所有内容都做成了一个 Skill。\n\n你可以安装上以后，让你的 AI 跟 Next Token 的几位主播直接交流，从我们的 9 期播客中汲取认知和挑选案例。\n\n这个对于行业调研和汇报都非常有用：https://t.co/B9PO3VX0Le"
+    },
+    {
+      "created_at": "Sat Nov 14 05:11:53 +0000 2026",
+      "id": "2121471156255613104",
+      "reply_count": 117,
+      "text": "今天很多人的 Claude 老号也弹 KYC 了啊"
+    }
+  ]
+}
