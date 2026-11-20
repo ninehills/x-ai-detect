@@ -25,7 +25,7 @@
     pendingEntries.length = 0;
     document.getElementById(TOOLBAR_ID)?.remove();
     document.getElementById(STATUS_ID)?.remove();
-    document.querySelectorAll('.axai-checking').forEach(a => a.classList.remove('axai-checking'));
+    document.querySelectorAll('article[data-axai-checking]').forEach(a => delete a.dataset.axaiChecking);
     const tip = document.createElement('div');
     tip.textContent = 'Anti-XAI 扩展已更新，请刷新页面后继续使用';
     tip.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;' +
@@ -229,20 +229,20 @@
     const s = document.createElement('style');
     s.id = STYLE_ID;
     s.textContent = `
-      article.axai-checking {
+      article[data-axai-checking="1"] {
         outline: 1px dashed rgba(148, 163, 184, 0.45) !important;
         outline-offset: -2px !important;
       }
-      article.axai-high {
+      article[data-axai-high="1"] {
         background: rgba(148, 163, 184, 0.08) !important;
         transition: background 0.2s ease !important;
       }
-      article.axai-high > *:not(.axai-badge-bar) {
+      article[data-axai-high="1"] > *:not(.axai-badge-bar) {
         opacity: 0.45 !important;
         filter: grayscale(65%) !important;
         transition: opacity 0.2s ease, filter 0.2s ease !important;
       }
-      article.axai-high:hover > *:not(.axai-badge-bar) {
+      article[data-axai-high="1"]:hover > *:not(.axai-badge-bar) {
         opacity: 1 !important;
         filter: none !important;
       }
@@ -425,7 +425,8 @@
   }
 
   function clearArticleBadge(article) {
-    article.classList.remove('axai-checking', 'axai-high');
+    delete article.dataset.axaiChecking;
+    delete article.dataset.axaiHigh;
     article.querySelector(':scope > .axai-badge-bar')?.remove();
     delete article.dataset.axaiSid;
   }
@@ -434,8 +435,8 @@
     ensureStyles();
     article.style.setProperty('position', 'relative', 'important');
     article.dataset.axaiSid = sid;
-    article.classList.add('axai-checking');
-    article.classList.remove('axai-high');
+    article.dataset.axaiChecking = '1';
+    delete article.dataset.axaiHigh;
     article.querySelector(':scope > .axai-badge-bar')?.remove();
 
     const bar = document.createElement('div');
@@ -451,14 +452,15 @@
     ensureStyles();
     article.style.setProperty('position', 'relative', 'important');
     article.dataset.axaiSid = sid;
-    article.classList.remove('axai-checking');
+    delete article.dataset.axaiChecking;
     article.querySelector(':scope > .axai-badge-bar')?.remove();
 
     const threshold = config?.aiThreshold ?? 0.6;
     const midThreshold = Math.max(0.35, threshold * 0.65);
     const score = typeof res.score === 'number' ? res.score : null;
     const isHigh = score != null && score >= threshold;
-    article.classList.toggle('axai-high', isHigh);
+    if (isHigh) article.dataset.axaiHigh = '1';
+    else delete article.dataset.axaiHigh;
 
     const bar = document.createElement('div');
     bar.className = 'axai-badge-bar';
