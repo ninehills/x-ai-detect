@@ -1,5 +1,7 @@
 # Anti-XAI：X (Twitter) 回复 AI Slop 探测器
 
+> **项目状态提示**：本项目为试验性项目，后续不会开发和维护，请各位参考。
+>
 > **来源与免责声明**：本项目的 Chrome 扩展基于 [**X 黄推屏蔽器**](https://chromewebstore.google.com/detail/x-%E9%BB%84%E6%8E%A8%E5%B1%8F%E8%94%BD%E5%99%A8/paaidifphnonojfblgioamenkigglhed)（ID: `paaidifphnonojfblgioamenkigglhed`）二次改造而来，**未经原作者授权**；如原作者认为不妥或要求下架，本仓库可随时删除。
 >
 > **准确率声明**：目前仅依据**单条回复**及当前页面可见信息很难准确识别所有 AI 账号，真正可靠的判定需要结合**账号级别的历史全部回复**进行综合分析；因此本工具给出的 AI 率打分与结论**仅供参考**，请自行判断后再决定是否屏蔽。
