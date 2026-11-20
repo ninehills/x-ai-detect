@@ -229,14 +229,18 @@
     const s = document.createElement('style');
     s.id = STYLE_ID;
     s.textContent = `
-      article.axai-checking {
-        outline: 1.5px dashed rgba(29, 155, 240, 0.7) !important;
-        outline-offset: -2px !important;
-      }
       article.axai-high {
-        outline: 1.5px solid rgba(224, 36, 94, 0.75) !important;
-        outline-offset: -2px !important;
-        background: rgba(224, 36, 94, 0.04) !important;
+        background: rgba(148, 163, 184, 0.08) !important;
+        transition: background 0.2s ease !important;
+      }
+      article.axai-high > *:not(.axai-badge-bar) {
+        opacity: 0.45 !important;
+        filter: grayscale(65%) !important;
+        transition: opacity 0.2s ease, filter 0.2s ease !important;
+      }
+      article.axai-high:hover > *:not(.axai-badge-bar) {
+        opacity: 0.85 !important;
+        filter: grayscale(15%) !important;
       }
       .axai-badge-bar {
         position: absolute !important;
@@ -245,60 +249,78 @@
         z-index: 20 !important;
         display: inline-flex !important;
         align-items: center !important;
-        gap: 6px !important;
+        gap: 5px !important;
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif !important;
         pointer-events: auto !important;
       }
       .axai-pill {
         display: inline-flex !important;
         align-items: center !important;
-        gap: 4px !important;
-        padding: 2px 8px !important;
+        gap: 3px !important;
+        padding: 1px 7px !important;
         border-radius: 999px !important;
+        border: 1px solid transparent !important;
         font-size: 11px !important;
-        font-weight: 700 !important;
+        font-weight: 500 !important;
         line-height: 18px !important;
-        letter-spacing: 0.2px !important;
-        color: #fff !important;
+        letter-spacing: 0.1px !important;
         user-select: none !important;
         white-space: nowrap !important;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22) !important;
       }
-      .axai-pill.checking { background: #1d9bf0 !important; }
-      .axai-pill.high { background: linear-gradient(135deg, #e0245e 0%, #be123c 100%) !important; }
-      .axai-pill.mid { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; }
-      .axai-pill.low { background: rgba(15, 118, 110, 0.88) !important; }
-      .axai-pill.err { background: #64748b !important; }
+      .axai-pill.checking {
+        background: rgba(100, 116, 139, 0.08) !important;
+        border-color: rgba(100, 116, 139, 0.18) !important;
+        color: #64748b !important;
+      }
+      .axai-pill.high {
+        background: rgba(225, 29, 72, 0.08) !important;
+        border-color: rgba(225, 29, 72, 0.22) !important;
+        color: #b94a63 !important;
+      }
+      .axai-pill.mid {
+        background: rgba(217, 119, 6, 0.08) !important;
+        border-color: rgba(217, 119, 6, 0.22) !important;
+        color: #a16207 !important;
+      }
+      .axai-pill.low {
+        background: rgba(100, 116, 139, 0.07) !important;
+        border-color: rgba(100, 116, 139, 0.16) !important;
+        color: #64748b !important;
+      }
+      .axai-pill.err {
+        background: rgba(100, 116, 139, 0.07) !important;
+        border-color: rgba(100, 116, 139, 0.16) !important;
+        color: #94a3b8 !important;
+      }
       .axai-block-btn {
         display: inline-flex !important;
         align-items: center !important;
-        padding: 2px 8px !important;
+        padding: 1px 7px !important;
         border-radius: 999px !important;
-        border: 1px solid rgba(224, 36, 94, 0.55) !important;
-        background: rgba(15, 20, 25, 0.88) !important;
-        color: #ff6b8b !important;
+        border: 1px solid rgba(100, 116, 139, 0.18) !important;
+        background: rgba(100, 116, 139, 0.06) !important;
+        color: #64748b !important;
         font-size: 11px !important;
-        font-weight: 600 !important;
+        font-weight: 500 !important;
         line-height: 18px !important;
         cursor: pointer !important;
         user-select: none !important;
         white-space: nowrap !important;
-        transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease !important;
+        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
       }
       .axai-block-btn:hover:not(:disabled) {
-        background: #e0245e !important;
-        border-color: #e0245e !important;
-        color: #fff !important;
-        transform: translateY(-0.5px) !important;
+        background: rgba(225, 29, 72, 0.12) !important;
+        border-color: rgba(225, 29, 72, 0.32) !important;
+        color: #be123c !important;
       }
       .axai-block-btn:disabled {
-        opacity: 0.72 !important;
+        opacity: 0.6 !important;
         cursor: default !important;
       }
       .axai-block-btn.blocked {
-        background: rgba(83, 100, 113, 0.22) !important;
-        border-color: rgba(83, 100, 113, 0.5) !important;
-        color: #8b98a5 !important;
+        background: rgba(100, 116, 139, 0.05) !important;
+        border-color: rgba(100, 116, 139, 0.14) !important;
+        color: #94a3b8 !important;
       }
       #${TOOLBAR_ID} {
         position: fixed;
@@ -416,7 +438,7 @@
     bar.className = 'axai-badge-bar';
     const pill = document.createElement('span');
     pill.className = 'axai-pill checking';
-    pill.textContent = '🤖 探测中…';
+    pill.textContent = '探测中…';
     bar.appendChild(pill);
     article.appendChild(bar);
   }
@@ -444,12 +466,12 @@
     if (score == null) {
       const blockedByPolicy = /Input blocked|Prohibited Use|sensitive/i.test(res.error || '');
       pill.className = 'axai-pill err';
-      pill.textContent = blockedByPolicy ? '🤖 内容受限' : '🤖 探测失败';
+      pill.textContent = blockedByPolicy ? '内容受限' : '探测失败';
       pill.title = res.error || '决策接口返回异常';
     } else {
       const pct = Math.round(score * 100);
       pill.className = `axai-pill ${isHigh ? 'high' : score >= midThreshold ? 'mid' : 'low'}`;
-      pill.textContent = `🤖 AI ${pct}%${res.mock ? ' · Mock' : ''}`;
+      pill.textContent = `AI ${pct}%`;
       pill.title = [
         `AI Slop 概率：${pct}%（阈值 ${Math.round(threshold * 100)}%）`,
         res.category ? `分类：${res.category}` : '',
@@ -469,7 +491,7 @@
         btn.disabled = true;
         btn.textContent = '已屏蔽';
       } else {
-        btn.textContent = '🚫 屏蔽';
+        btn.textContent = '屏蔽';
         btn.title = `通过页面菜单屏蔽 @${res.user.handle}`;
         btn.addEventListener('click', async e => {
           stop(e);
