@@ -229,6 +229,10 @@
     const s = document.createElement('style');
     s.id = STYLE_ID;
     s.textContent = `
+      article.axai-checking {
+        outline: 1px dashed rgba(148, 163, 184, 0.45) !important;
+        outline-offset: -2px !important;
+      }
       article.axai-high {
         background: rgba(148, 163, 184, 0.08) !important;
         transition: background 0.2s ease !important;
@@ -239,13 +243,13 @@
         transition: opacity 0.2s ease, filter 0.2s ease !important;
       }
       article.axai-high:hover > *:not(.axai-badge-bar) {
-        opacity: 0.85 !important;
-        filter: grayscale(15%) !important;
+        opacity: 1 !important;
+        filter: none !important;
       }
       .axai-badge-bar {
         position: absolute !important;
         top: 6px !important;
-        right: 48px !important;
+        right: 58px !important;
         z-index: 20 !important;
         display: inline-flex !important;
         align-items: center !important;
