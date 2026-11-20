@@ -10,7 +10,7 @@ const DEFAULTS = {
   jevApiKey: '',
   jevModel: '',
   jevMode: 'thread',
-  aiThreshold: 0.6,
+  aiThreshold: null,
   browseScope: 'replies',
   allowHandles: [],
   promptConfig: null
@@ -220,6 +220,21 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           jevCache.clear();
         }
         sendResponse({ ok: true });
+        return;
+      }
+      case 'RESET_PROMPT_CONFIG': {
+        bundledPromptPromise = null;
+        const bundled = await loadBundledPromptConfig();
+        const norm = normalizePromptConfig(null, bundled);
+        await chrome.storage.local.set({
+          promptConfig: null,
+          aiThreshold: norm.threshold,
+          jevMode: norm.use_thread_context ? 'thread' : 'single'
+        });
+        jevResetPause();
+        threadCache.clear();
+        jevCache.clear();
+        sendResponse({ ok: true, promptConfig: norm });
         return;
       }
       case 'OPEN_OPTIONS': {

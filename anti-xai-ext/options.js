@@ -173,6 +173,19 @@ $('copyPromptBtn').addEventListener('click', async () => {
   }
 });
 
+$('resetPromptBtn').addEventListener('click', async () => {
+  const msg = $('promptJsonMsg');
+  const res = await send({ type: 'RESET_PROMPT_CONFIG' });
+  if (res?.ok) {
+    msg.className = 'msg ok';
+    msg.textContent = '✅ 已恢复为扩展内置默认提示词与阈值，并清空缓存';
+    loadSettings();
+  } else {
+    msg.className = 'msg err';
+    msg.textContent = '恢复默认配置失败';
+  }
+});
+
 let recPage = 1;
 const REC_SIZE = 30;
 let recTotal = 0;
